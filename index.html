@@ -1,0 +1,379 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#10152b">
+<title>GSP LEARN - Your Digital School</title>
+
+<style>
+:root{
+ --bg:#f3f5fc;
+ --card:#ffffff;
+ --text:#172039;
+ --muted:#69748b;
+ --primary:#6558e8;
+ --secondary:#9278ff;
+ --border:#e5e8f2;
+}
+.dark{
+ --bg:#0b1020;
+ --card:#151d33;
+ --text:#f5f6ff;
+ --muted:#aab4ca;
+ --primary:#8877ff;
+ --secondary:#b29cff;
+ --border:#29334e;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+ background:var(--bg);
+ color:var(--text);
+ font-family:Arial,"Noto Sans Devanagari",sans-serif;
+ transition:.2s;
+}
+header{
+ background:linear-gradient(120deg,#171d42,#5039a8,#7656ec);
+ color:white;padding:19px 16px 25px;
+ border-radius:0 0 25px 25px;
+}
+.top{
+ display:flex;align-items:center;justify-content:space-between;
+}
+.logo{font-size:23px;font-weight:900;letter-spacing:1px}
+.logo span{color:#c9b9ff}
+.theme{
+ background:#ffffff20;border:1px solid #ffffff50;
+ color:white;border-radius:12px;padding:9px 12px;
+ font-size:18px;cursor:pointer;
+}
+.hero{margin-top:25px}
+.hero h1{font-size:25px;line-height:1.4}
+.hero p{color:#e0ddff;margin-top:7px;font-size:14px}
+.search{
+ margin-top:18px;width:100%;padding:13px;
+ border:0;border-radius:12px;font-size:14px;outline:none;
+}
+.container{max-width:850px;margin:auto;padding:17px 14px 40px}
+.section-title{font-size:19px;font-weight:800;margin:21px 0 12px}
+.small{font-size:13px;color:var(--muted);margin-top:5px}
+.card{
+ background:var(--card);border:1px solid var(--border);
+ border-radius:17px;padding:15px;margin-bottom:13px;
+}
+.grid{
+ display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
+}
+.class-btn{
+ background:var(--card);border:1px solid var(--border);
+ color:var(--text);border-radius:13px;padding:15px 5px;
+ cursor:pointer;font-size:13px;font-weight:bold;
+ transition:.2s;
+}
+.class-btn .emoji{font-size:24px;display:block;margin-bottom:8px}
+.class-btn.active,.subject-btn.active,.lesson-btn.active{
+ border:2px solid var(--primary);
+ background:color-mix(in srgb,var(--primary) 12%,var(--card));
+}
+button{font-family:inherit}
+select{
+ width:100%;padding:13px;border:1px solid var(--border);
+ border-radius:11px;background:var(--card);color:var(--text);
+ font-size:15px;margin-top:10px;
+}
+.subjects{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.subject-btn,.lesson-btn{
+ background:var(--card);border:1px solid var(--border);
+ border-radius:12px;padding:15px;text-align:left;
+ color:var(--text);cursor:pointer;font-weight:bold;
+}
+.subject-btn span{display:block;font-size:23px;margin-bottom:7px}
+.lesson-list{display:grid;gap:9px}
+.lesson-btn{display:flex;align-items:center;gap:12px}
+.lesson-btn span{font-size:23px}
+.types{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.type-btn{
+ padding:14px;background:var(--card);border:1px solid var(--border);
+ color:var(--text);border-radius:12px;text-align:left;
+ cursor:pointer;
+}
+.type-btn strong{display:block;margin:6px 0}
+.type-btn small{color:var(--muted)}
+.primary-btn{
+ width:100%;padding:14px;border:0;border-radius:12px;
+ background:linear-gradient(110deg,var(--primary),var(--secondary));
+ color:white;font-size:16px;font-weight:bold;cursor:pointer;
+ margin-top:13px;
+}
+.result{
+ background:var(--card);border:1px solid var(--border);
+ padding:17px;border-radius:15px;margin-top:13px;
+}
+.hidden{display:none!important}
+.tag{
+ display:inline-block;background:#e9e4ff;color:#5639c4;
+ border-radius:20px;padding:5px 10px;font-size:11px;font-weight:bold;
+}
+footer{text-align:center;color:var(--muted);padding:25px;font-size:12px}
+.back{
+ background:transparent;border:0;color:var(--primary);
+ font-weight:bold;cursor:pointer;margin-bottom:12px;
+}
+@media(min-width:600px){
+ .grid{grid-template-columns:repeat(5,1fr)}
+ .subjects{grid-template-columns:repeat(3,1fr)}
+ .types{grid-template-columns:repeat(3,1fr)}
+}
+</style>
+</head>
+
+<body>
+<header>
+ <div class="top">
+  <div class="logo">GSP <span>LEARN</span></div>
+  <button class="theme" onclick="toggleTheme()">🌙</button>
+ </div>
+ <div class="hero">
+  <h1>पढ़ाई अब होगी और भी आसान! 📚</h1>
+  <p>Nursery से Class 12 तक – आपका अपना Digital School</p>
+ </div>
+ <input class="search" id="search" placeholder="🔍 अपनी कक्षा खोजें..." oninput="searchClasses()">
+</header>
+
+<main class="container">
+
+<section id="classSection">
+ <div class="section-title">🎓 अपनी कक्षा चुनें</div>
+ <p class="small">आप किस कक्षा में पढ़ना चाहते हैं?</p>
+ <div class="grid" id="classGrid"></div>
+</section>
+
+<section id="boardSection" class="hidden">
+ <button class="back" onclick="goBack('class')">← वापस</button>
+ <div class="section-title">🏫 अपना बोर्ड चुनें</div>
+ <div class="card">
+  <p id="selectedClass" style="font-weight:bold"></p>
+  <select id="board">
+   <option>UP Board</option>
+   <option>CBSE</option>
+   <option>NCERT</option>
+   <option>अन्य State Board</option>
+  </select>
+  <button class="primary-btn" onclick="showSubjects()">आगे बढ़ें →</button>
+ </div>
+</section>
+
+<section id="subjectSection" class="hidden">
+ <button class="back" onclick="goBack('board')">← वापस</button>
+ <div class="section-title">📚 अपना विषय चुनें</div>
+ <p class="small" id="subjectInfo"></p>
+ <div class="subjects" id="subjectGrid"></div>
+</section>
+
+<section id="lessonSection" class="hidden">
+ <button class="back" onclick="goBack('subject')">← वापस</button>
+ <div class="section-title">📖 अपना Lesson चुनें</div>
+ <p class="small" id="lessonInfo"></p>
+ <div class="lesson-list" id="lessonList"></div>
+</section>
+
+<section id="pdfSection" class="hidden">
+ <button class="back" onclick="goBack('lesson')">← वापस</button>
+ <div class="section-title">📄 अपनी PDF चुनें</div>
+ <p class="small" id="pdfInfo"></p>
+ <div class="types" id="pdfTypes"></div>
+ <div id="pdfResult"></div>
+</section>
+
+<div class="card" style="margin-top:25px">
+ <div style="font-size:20px;font-weight:bold">✨ GSP LEARN FEATURES</div>
+ <div class="small" style="line-height:2.2;margin-top:9px">
+ 📚 Chapter-wise Study Material<br>
+ 📝 Online Tests & MCQ<br>
+ 🤖 AI Teacher (आने वाला फीचर)<br>
+ 🎥 Video Learning (आने वाला फीचर)<br>
+ 🏆 Quiz & Leaderboard (आने वाला फीचर)
+ </div>
+</div>
+
+</main>
+
+<footer>
+ <b>GSP LEARN</b><br>
+ Your Digital School | Learn • Grow • Succeed<br>
+ © 2026 GSP LEARN
+</footer>
+
+<script>
+const classes=[
+"Nursery","LKG","UKG",
+"Class 1","Class 2","Class 3","Class 4","Class 5",
+"Class 6","Class 7","Class 8","Class 9","Class 10",
+"Class 11","Class 12"
+];
+
+const icons=["🧸","🔤","🎨","📕","📗","📘","📙","📚",
+"🔬","🧮","🌍","✍️","🎓","🧪","🏆"];
+
+const subjects={
+junior:["हिंदी","English","गणित","EVS","पर्यावरण","GK","Computer"],
+middle:["हिंदी","English","गणित","विज्ञान","सामाजिक विज्ञान","संस्कृत","Computer"],
+high:["हिंदी","English","गणित","विज्ञान","सामाजिक विज्ञान","संस्कृत","Computer"],
+senior:["हिंदी","English","भौतिक विज्ञान","रसायन विज्ञान","जीव विज्ञान","गणित","इतिहास","भूगोल","राजनीति विज्ञान","अर्थशास्त्र","लेखाशास्त्र","व्यवसाय अध्ययन","Computer"]
+};
+
+const subjectIcons={
+"हिंदी":"📕","English":"🔤","गणित":"🧮",
+"विज्ञान":"🔬","सामाजिक विज्ञान":"🌍",
+"संस्कृत":"📜","Computer":"💻","EVS":"🌱",
+"पर्यावरण":"🌳","GK":"🧠","भौतिक विज्ञान":"⚡",
+"रसायन विज्ञान":"🧪","जीव विज्ञान":"🧬",
+"इतिहास":"🏛️","भूगोल":"🌎",
+"राजनीति विज्ञान":"⚖️","अर्थशास्त्र":"📈",
+"लेखाशास्त्र":"📊","व्यवसाय अध्ययन":"💼"
+};
+
+const pdfOptions=[
+ {name:"पूरे चैप्टर की थ्योरी",icon:"📖",detail:"अध्याय की पूरी जानकारी"},
+ {name:"प्रश्न और उत्तर",icon:"✍️",detail:"कॉपी में लिखने योग्य"},
+ {name:"महत्वपूर्ण प्रश्न",icon:"⭐",detail:"परीक्षा की तैयारी"},
+ {name:"MCQ प्रश्न",icon:"📝",detail:"बहुविकल्पीय प्रश्न"},
+ {name:"अभ्यास प्रश्न",icon:"🎯",detail:"अपनी तैयारी जाँचें"},
+ {name:"संक्षिप्त नोट्स",icon:"📄",detail:"Quick Revision"},
+ {name:"विस्तृत नोट्स",icon:"📚",detail:"पूरे विस्तार से"}
+];
+
+let currentClass="";
+let currentSubject="";
+let currentLesson="";
+
+function renderClasses(list=classes){
+ const grid=document.getElementById("classGrid");
+ grid.innerHTML="";
+ list.forEach(c=>{
+  let i=classes.indexOf(c);
+  const b=document.createElement("button");
+  b.className="class-btn";
+  b.innerHTML=`<span class="emoji">${icons[i]}</span>${c}`;
+  b.onclick=()=>selectClass(c);
+  grid.appendChild(b);
+ });
+}
+
+function searchClasses(){
+ const q=document.getElementById("search").value.toLowerCase();
+ renderClasses(classes.filter(c=>c.toLowerCase().includes(q)));
+}
+
+function selectClass(c){
+ currentClass=c;
+ document.getElementById("selectedClass").textContent="चयनित कक्षा: "+c;
+ show("boardSection");
+}
+
+function showSubjects(){
+ const index=classes.indexOf(currentClass);
+ let list;
+ if(index<=2) list=subjects.junior;
+ else if(index<=7) list=subjects.middle;
+ else if(index<=12) list=subjects.high;
+ else list=subjects.senior;
+
+ document.getElementById("subjectInfo").textContent=
+ currentClass+" | "+document.getElementById("board").value;
+
+ const grid=document.getElementById("subjectGrid");
+ grid.innerHTML="";
+ list.forEach(s=>{
+  const b=document.createElement("button");
+  b.className="subject-btn";
+  b.innerHTML=`<span>${subjectIcons[s]||"📚"}</span>${s}`;
+  b.onclick=()=>selectSubject(s);
+  grid.appendChild(b);
+ });
+ show("subjectSection");
+}
+
+function selectSubject(s){
+ currentSubject=s;
+ document.getElementById("lessonInfo").textContent=
+ currentClass+" • "+s;
+
+ const list=document.getElementById("lessonList");
+ list.innerHTML="";
+ for(let i=1;i<=10;i++){
+  const b=document.createElement("button");
+  b.className="lesson-btn";
+  b.innerHTML=`<span>📘</span><div>अध्याय ${i}<div class="small">Chapter ${i}</div></div>`;
+  b.onclick=()=>selectLesson("अध्याय "+i);
+  list.appendChild(b);
+ }
+ show("lessonSection");
+}
+
+function selectLesson(l){
+ currentLesson=l;
+ document.getElementById("pdfInfo").textContent=
+ currentClass+" • "+currentSubject+" • "+l;
+
+ const grid=document.getElementById("pdfTypes");
+ grid.innerHTML="";
+ pdfOptions.forEach((p,i)=>{
+  const b=document.createElement("button");
+  b.className="type-btn";
+  b.innerHTML=`<span style="font-size:23px">${p.icon}</span>
+  <strong>${p.name}</strong><small>${p.detail}</small>`;
+  b.onclick=()=>showPdfMessage(p);
+  grid.appendChild(b);
+ });
+ document.getElementById("pdfResult").innerHTML="";
+ show("pdfSection");
+}
+
+function showPdfMessage(p){
+ const result=document.getElementById("pdfResult");
+ result.innerHTML="";
+ const box=document.createElement("div");
+ box.className="result";
+ const title=document.createElement("h3");
+ title.textContent="📄 "+p.name;
+ const desc=document.createElement("p");
+ desc.className="small";
+ desc.textContent=currentClass+" | "+currentSubject+" | "+currentLesson;
+ const note=document.createElement("p");
+ note.style.marginTop="12px";
+ note.textContent="इस सामग्री की PDF अभी तैयार नहीं की गई है। वास्तविक पाठ्यक्रम के अनुसार सामग्री जोड़ने के बाद यहाँ पढ़ने और डाउनलोड करने का विकल्प मिलेगा।";
+ box.append(title,desc,note);
+ result.appendChild(box);
+}
+
+function show(id){
+ ["classSection","boardSection","subjectSection",
+ "lessonSection","pdfSection"].forEach(s=>{
+  document.getElementById(s).classList.add("hidden");
+ });
+ document.getElementById(id).classList.remove("hidden");
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function goBack(from){
+ const routes={
+ class:"classSection",
+ board:"boardSection",
+ subject:"subjectSection",
+ lesson:"lessonSection"
+ };
+ show(routes[from]);
+}
+
+function toggleTheme(){
+ document.body.classList.toggle("dark");
+ document.querySelector(".theme").textContent=
+ document.body.classList.contains("dark")?"☀️":"🌙";
+}
+
+renderClasses();
+</script>
+</body>
+</html>
