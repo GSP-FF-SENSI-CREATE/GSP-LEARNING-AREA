@@ -4,517 +4,718 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="GSP LEARN - UP Board Class 10 और 12 की पढ़ाई के लिए Study Website">
-  <title>GSP LEARN | UP Board Study Website</title>
+  <title>GSP LEARN | Smart Study Platform</title>
+  <meta name="description" content="GSP LEARN - UP Board Class 10 और 12 के विद्यार्थियों के लिए Smart Learning Platform.">
 
-  <!-- PART 2: CSS DESIGN इसी STYLE TAG में जोड़ा जाएगा -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+
   <style>
-    /* Basic starting styles */
     * {
+      margin: 0;
+      padding: 0;
       box-sizing: border-box;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f4f6fb;
-      color: #222;
+      font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif;
+      background: #071426;
+      color: #f4f7ff;
+      overflow-x: hidden;
+    }
+
+    :root {
+      --blue: #2563eb;
+      --cyan: #22d3ee;
+      --dark: #071426;
+      --card: #10233d;
+      --muted: #a8b6cc;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
     }
 
     button {
+      font: inherit;
       cursor: pointer;
+    }
+
+    .container {
+      width: min(1150px, 90%);
+      margin: auto;
+    }
+
+    /* HEADER */
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(7, 20, 38, .92);
+      backdrop-filter: blur(15px);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+    .navbar {
+      min-height: 76px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .logo {
+      font-size: 25px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: white;
+    }
+
+    .logo span {
+      color: var(--cyan);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .nav-links a {
+      color: #c4d0e3;
+      font-size: 14px;
+      transition: .3s;
+    }
+
+    .nav-links a:hover {
+      color: var(--cyan);
+    }
+
+    .nav-btn {
+      background: var(--blue);
+      color: white;
+      border: none;
+      padding: 11px 20px;
+      border-radius: 10px;
+      font-weight: 600;
+      transition: .3s;
+    }
+
+    .nav-btn:hover {
+      background: #1d4ed8;
+      transform: translateY(-2px);
+    }
+
+    .menu-btn {
+      display: none;
+      background: transparent;
+      border: 0;
+      color: white;
+      font-size: 27px;
+    }
+
+    /* HERO */
+
+    .hero {
+      position: relative;
+      padding: 100px 0 90px;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse at 80% 20%, rgba(37,99,235,.24), transparent 40%),
+        radial-gradient(ellipse at 10% 80%, rgba(34,211,238,.12), transparent 35%);
+    }
+
+    .hero-content {
+      max-width: 780px;
+      text-align: center;
+      margin: auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      padding: 9px 17px;
+      border: 1px solid rgba(34,211,238,.35);
+      background: rgba(34,211,238,.08);
+      color: var(--cyan);
+      border-radius: 30px;
+      font-size: 13px;
+      margin-bottom: 25px;
+    }
+
+    .hero h1 {
+      font-size: clamp(38px, 7vw, 68px);
+      line-height: 1.15;
+      font-weight: 800;
+      margin-bottom: 22px;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(90deg, #22d3ee, #60a5fa);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.9;
+      max-width: 650px;
+      margin: 0 auto 32px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .primary-btn, .secondary-btn {
+      padding: 14px 25px;
+      border-radius: 11px;
+      font-weight: 600;
+      border: 1px solid transparent;
+      transition: .3s;
+    }
+
+    .primary-btn {
+      background: linear-gradient(90deg, #2563eb, #0891b2);
+      color: white;
+    }
+
+    .secondary-btn {
+      border-color: rgba(255,255,255,.2);
+      color: white;
+      background: rgba(255,255,255,.04);
+    }
+
+    .primary-btn:hover, .secondary-btn:hover {
+      transform: translateY(-4px);
+    }
+
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 45px;
+      margin-top: 65px;
+    }
+
+    .stat h3 {
+      font-size: 27px;
+      color: var(--cyan);
+    }
+
+    .stat p {
+      font-size: 12px;
+      margin: 3px 0 0;
+    }
+
+    /* COMMON SECTION */
+
+    section {
+      padding: 80px 0;
+    }
+
+    .section-heading {
+      text-align: center;
+      margin-bottom: 45px;
+    }
+
+    .section-heading small {
+      color: var(--cyan);
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .section-heading h2 {
+      font-size: clamp(27px, 4vw, 39px);
+      margin: 12px 0;
+    }
+
+    .section-heading p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* CLASS CARDS */
+
+    .classes {
+      background: #0a1a30;
+    }
+
+    .class-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 25px;
+    }
+
+    .class-card {
+      position: relative;
+      overflow: hidden;
+      padding: 35px;
+      border-radius: 20px;
+      background: linear-gradient(145deg, #142c4b, #0d2039);
+      border: 1px solid rgba(255,255,255,.09);
+      transition: .35s;
+    }
+
+    .class-card:hover {
+      transform: translateY(-7px);
+      border-color: rgba(34,211,238,.5);
+      box-shadow: 0 15px 40px rgba(0,0,0,.2);
+    }
+
+    .class-icon {
+      width: 65px;
+      height: 65px;
+      display: grid;
+      place-items: center;
+      background: rgba(34,211,238,.12);
+      border-radius: 17px;
+      font-size: 32px;
+      margin-bottom: 23px;
+    }
+
+    .class-card h3 {
+      font-size: 25px;
+      margin-bottom: 10px;
+    }
+
+    .class-card p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.8;
+      margin-bottom: 25px;
+    }
+
+    .class-card button {
+      padding: 12px 20px;
+      background: var(--blue);
+      color: white;
+      border: none;
+      border-radius: 9px;
+      font-weight: 600;
+    }
+
+    /* SUBJECTS */
+
+    .subject-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .subject-card {
+      padding: 24px 18px;
+      text-align: center;
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 15px;
+      transition: .3s;
+    }
+
+    .subject-card:hover {
+      transform: translateY(-5px);
+      background: #163354;
+    }
+
+    .subject-card .emoji {
+      font-size: 30px;
+      margin-bottom: 12px;
+    }
+
+    .subject-card h3 {
+      font-size: 15px;
+    }
+
+    /* FEATURES */
+
+    .features {
+      background: #0a1a30;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .feature-card {
+      padding: 27px;
+      background: #10233d;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.07);
+    }
+
+    .feature-card .emoji {
+      font-size: 29px;
+    }
+
+    .feature-card h3 {
+      margin: 15px 0 9px;
+      font-size: 18px;
+    }
+
+    .feature-card p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    /* ABOUT */
+
+    .about-box {
+      text-align: center;
+      max-width: 750px;
+      margin: auto;
+    }
+
+    .about-box p {
+      color: var(--muted);
+      line-height: 2;
+      font-size: 14px;
+    }
+
+    /* FOOTER */
+
+    footer {
+      background: #040d19;
+      padding: 35px 0;
+      border-top: 1px solid rgba(255,255,255,.07);
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    footer p {
+      color: #8fa1ba;
+      font-size: 12px;
+    }
+
+    /* COMING SOON */
+
+    .notice {
+      display: none;
+      position: fixed;
+      bottom: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 200;
+      background: #163354;
+      border: 1px solid var(--cyan);
+      color: white;
+      padding: 13px 20px;
+      border-radius: 12px;
+      width: max-content;
+      max-width: 90%;
+      font-size: 13px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.4);
+    }
+
+    @media(max-width: 750px) {
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 76px;
+        left: 0;
+        width: 100%;
+        padding: 22px;
+        background: #0b1d34;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 20px;
+      }
+
+      .nav-links.show {
+        display: flex;
+      }
+
+      .nav-btn {
+        width: 100%;
+      }
+
+      .menu-btn {
+        display: block;
+      }
+
+      .hero {
+        padding: 75px 0 65px;
+      }
+
+      .hero-stats {
+        gap: 25px;
+      }
+
+      .class-grid, .feature-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .subject-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      section {
+        padding: 65px 0;
+      }
+    }
+
+    @media(max-width: 400px) {
+      .subject-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .class-card {
+        padding: 25px;
+      }
     }
   </style>
 </head>
 
 <body>
 
-  <!-- HEADER -->
-  <header id="mainHeader">
-    <div class="logo">
-      <h1>GSP LEARN</h1>
-      <p>UP Board Study Portal</p>
-    </div>
+  <header>
+    <div class="container navbar">
+      <a href="#home" class="logo">GSP <span>LEARN</span></a>
 
-    <nav>
-      <button onclick="showPage('homePage')">Home</button>
-      <button onclick="showPage('classPage')">Classes</button>
-      <button onclick="showPage('aboutPage')">About</button>
-    </nav>
+      <nav class="nav-links" id="navLinks">
+        <a href="#home" onclick="closeMenu()">Home</a>
+        <a href="#classes" onclick="closeMenu()">Classes</a>
+        <a href="#subjects" onclick="closeMenu()">Subjects</a>
+        <a href="#features" onclick="closeMenu()">Features</a>
+        <a href="#about" onclick="closeMenu()">About</a>
+        <button class="nav-btn" onclick="goToClasses()">Start Learning</button>
+      </nav>
+
+      <button class="menu-btn" onclick="toggleMenu()" aria-label="Open menu">☰</button>
+    </div>
   </header>
 
-  <!-- MAIN WEBSITE CONTENT -->
   <main>
+    <!-- HERO SECTION -->
+    <section class="hero" id="home">
+      <div class="container">
+        <div class="hero-content">
+          <div class="hero-tag">🎓 UP BOARD STUDENTS LEARNING PLATFORM</div>
 
-    <!-- HOME PAGE -->
-    <section id="homePage" class="page active">
-      <h2>Welcome to GSP LEARN</h2>
-      <p>UP Board Class 10 और Class 12 की पढ़ाई अब एक ही जगह।</p>
+          <h1>
+            पढ़ाई अब होगी<br>
+            <span>Smart और आसान!</span>
+          </h1>
 
-      <div class="class-container">
-        <div class="class-card">
-          <h3>Class 10</h3>
-          <p>High School Study Material</p>
-          <button onclick="openClass(10)">Explore Class 10</button>
+          <p>
+            Welcome to GSP LEARN. यहाँ Class 10 और Class 12 के विद्यार्थियों
+            के लिए Notes, Questions, MCQ Practice और Study Material
+            एक ही जगह उपलब्ध कराने का लक्ष्य है।
+          </p>
+
+          <div class="hero-buttons">
+            <button class="primary-btn" onclick="goToClasses()">Start Learning →</button>
+            <a href="#features" class="secondary-btn">Explore Features</a>
+          </div>
+
+          <div class="hero-stats">
+            <div class="stat">
+              <h3>10th</h3>
+              <p>Class 10</p>
+            </div>
+            <div class="stat">
+              <h3>12th</h3>
+              <p>Class 12</p>
+            </div>
+            <div class="stat">
+              <h3>24/7</h3>
+              <p>Learn Anytime</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLASSES SECTION -->
+    <section class="classes" id="classes">
+      <div class="container">
+        <div class="section-heading">
+          <small>Choose Your Class</small>
+          <h2>अपनी कक्षा चुनें</h2>
+          <p>अपनी कक्षा के अनुसार पढ़ाई शुरू करें।</p>
         </div>
 
-        <div class="class-card">
-          <h3>Class 12</h3>
-          <p>Intermediate Study Material</p>
-          <button onclick="openClass(12)">Explore Class 12</button>
+        <div class="class-grid">
+          <div class="class-card">
+            <div class="class-icon">📘</div>
+            <h3>Class 10th</h3>
+            <p>
+              UP Board कक्षा 10 के लिए सभी मुख्य विषयों का
+              Study Material, Notes और Practice Questions.
+            </p>
+            <button onclick="selectClass(10)">Explore Class 10 →</button>
+          </div>
+
+          <div class="class-card">
+            <div class="class-icon">📚</div>
+            <h3>Class 12th</h3>
+            <p>
+              UP Board कक्षा 12 के लिए विषयवार अध्ययन सामग्री,
+              Important Questions और MCQ Practice.
+            </p>
+            <button onclick="selectClass(12)">Explore Class 12 →</button>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- CLASS SELECTION PAGE -->
-    <section id="classPage" class="page">
-      <h2>Select Your Class</h2>
+    <!-- SUBJECTS SECTION -->
+    <section id="subjects">
+      <div class="container">
+        <div class="section-heading">
+          <small>Study Subjects</small>
+          <h2>मुख्य विषय</h2>
+          <p>हर विषय की पढ़ाई के लिए एक ही प्लेटफॉर्म।</p>
+        </div>
 
-      <div class="class-container">
-        <button onclick="openClass(10)">Class 10</button>
-        <button onclick="openClass(12)">Class 12</button>
+        <div class="subject-grid">
+          <div class="subject-card"><div class="emoji">📖</div><h3>Hindi</h3></div>
+          <div class="subject-card"><div class="emoji">🔤</div><h3>English</h3></div>
+          <div class="subject-card"><div class="emoji">🔬</div><h3>Science</h3></div>
+          <div class="subject-card"><div class="emoji">🌍</div><h3>Social Science</h3></div>
+          <div class="subject-card"><div class="emoji">➗</div><h3>Mathematics</h3></div>
+          <div class="subject-card"><div class="emoji">⚛️</div><h3>Physics</h3></div>
+          <div class="subject-card"><div class="emoji">🧪</div><h3>Chemistry</h3></div>
+          <div class="subject-card"><div class="emoji">🧬</div><h3>Biology</h3></div>
+          <div class="subject-card"><div class="emoji">🎨</div><h3>Drawing</h3></div>
+        </div>
       </div>
     </section>
 
-    <!-- SUBJECTS PAGE -->
-    <section id="subjectsPage" class="page">
-      <button onclick="showPage('homePage')">← Home</button>
-      <h2 id="classHeading">Subjects</h2>
+    <!-- FEATURES SECTION -->
+    <section class="features" id="features">
+      <div class="container">
+        <div class="section-heading">
+          <small>Why GSP LEARN?</small>
+          <h2>हमारे Learning Features</h2>
+          <p>बेहतर तैयारी के लिए जरूरी सुविधाएँ।</p>
+        </div>
 
-      <div id="subjectsContainer">
-        <!-- Subjects will be added in later parts -->
+        <div class="feature-grid">
+          <div class="feature-card">
+            <div class="emoji">📚</div>
+            <h3>Chapter Wise Notes</h3>
+            <p>हर अध्याय के अनुसार व्यवस्थित Notes और Theory.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="emoji">❓</div>
+            <h3>Important Questions</h3>
+            <p>अभ्यास के लिए महत्वपूर्ण प्रश्न और उनके उत्तर।</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="emoji">📝</div>
+            <h3>MCQ Practice</h3>
+            <p>अपनी तैयारी जाँचने के लिए Interactive Quiz.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="emoji">📄</div>
+            <h3>Short Notes</h3>
+            <p>Revision के लिए छोटे और व्यवस्थित Notes.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="emoji">🎯</div>
+            <h3>Exam Preparation</h3>
+            <p>परीक्षा की तैयारी के लिए उपयोगी अभ्यास सामग्री।</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="emoji">📱</div>
+            <h3>Mobile Friendly</h3>
+            <p>मोबाइल, टैबलेट और कंप्यूटर पर आसान उपयोग।</p>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- CHAPTERS PAGE -->
-    <section id="chaptersPage" class="page">
-      <button onclick="goBackToSubjects()">← Back to Subjects</button>
-      <h2 id="subjectHeading">Chapters</h2>
+    <!-- ABOUT SECTION -->
+    <section id="about">
+      <div class="container">
+        <div class="about-box">
+          <div class="section-heading">
+            <small>About Us</small>
+            <h2>About GSP LEARN</h2>
+          </div>
 
-      <div id="chaptersContainer">
-        <!-- Chapters will be added in later parts -->
+          <p>
+            GSP LEARN एक Educational Website Project है जिसका उद्देश्य
+            UP Board के Class 10 और Class 12 के विद्यार्थियों को
+            व्यवस्थित Study Material और Practice सुविधाएँ एक ही जगह देना है।
+            हमारा लक्ष्य पढ़ाई को सरल, उपयोगी और सभी डिवाइस पर सुलभ बनाना है।
+          </p>
+        </div>
       </div>
     </section>
-
-    <!-- STUDY MATERIAL PAGE -->
-    <section id="studyPage" class="page">
-      <button onclick="goBackToChapters()">← Back to Chapters</button>
-      <h2 id="lessonHeading">Study Material</h2>
-
-      <div class="study-tabs">
-        <button onclick="tab('theory')">Theory</button>
-        <button onclick="tab('qa')">Question Answer</button>
-        <button onclick="tab('important')">Important Questions</button>
-        <button onclick="tab('notes')">Short Notes</button>
-        <button onclick="tab('pyq')">PYQ</button>
-        <button onclick="tab('mcq')">MCQ Quiz</button>
-      </div>
-
-      <div id="studyContent">
-        <!-- Study material will be added in later parts -->
-      </div>
-    </section>
-
-    <!-- ABOUT PAGE -->
-    <section id="aboutPage" class="page">
-      <h2>About GSP LEARN</h2>
-      <p>
-        GSP LEARN एक educational website है जहाँ UP Board
-        Class 10 और Class 12 के विद्यार्थियों के लिए
-        study material उपलब्ध कराया जाएगा।
-      </p>
-    </section>
-
   </main>
 
   <!-- FOOTER -->
-  <footer id="mainFooter">
-    <p>© 2026 GSP LEARN | All Rights Reserved</p>
+  <footer>
+    <div class="container footer-content">
+      <a href="#home" class="logo">GSP <span>LEARN</span></a>
+      <p>© <span id="year"></span> GSP LEARN. All Rights Reserved.</p>
+      <p>Learn Smart. Grow Better.</p>
+    </div>
   </footer>
 
-  <!-- PART 3 ONWARDS: JAVASCRIPT इसी SCRIPT TAG में जोड़ा जाएगा -->
+  <div class="notice" id="notice" role="status"></div>
+
   <script>
-
-/* =================================
-   GSP LEARN - PART 2
-   COMPLETE CSS DESIGN
-================================= */
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-:root {
-  --bg: #071326;
-  --card: #10213a;
-  --card2: #142c49;
-  --border: #29415f;
-  --primary: #1687ff;
-  --cyan: #00d5ff;
-  --white: #f4f7ff;
-  --muted: #a9bad2;
-  --success: #12633e;
-  --danger: #8c2636;
-}
-
-body {
-  background: var(--bg);
-  color: var(--white);
-  font-family: Arial, "Noto Sans Devanagari", sans-serif;
-  line-height: 1.6;
-  min-height: 100vh;
-}
-
-/* HEADER */
-
-#mainHeader {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: rgba(9, 24, 45, 0.96);
-  border-bottom: 1px solid var(--border);
-  padding: 15px 5%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12px;
-  backdrop-filter: blur(12px);
-}
-
-.logo h1 {
-  font-size: 25px;
-  font-weight: 900;
-  letter-spacing: 1px;
-}
-
-.logo h1,
-.logo span {
-  color: var(--cyan);
-}
-
-.logo p {
-  color: var(--muted);
-  font-size: 11px;
-}
-
-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-/* BUTTONS */
-
-button {
-  background: var(--primary);
-  color: white;
-  border: 0;
-  padding: 11px 16px;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: bold;
-  transition: 0.25s;
-  cursor: pointer;
-}
-
-button:hover {
-  background: var(--cyan);
-  color: #071326;
-  transform: translateY(-2px);
-}
-
-button:active {
-  transform: scale(0.97);
-}
-
-/* MAIN */
-
-main {
-  width: 100%;
-  max-width: 1100px;
-  margin: auto;
-  padding: 25px 16px 55px;
-}
-
-.page {
-  display: none;
-  animation: pageIn 0.35s ease;
-}
-
-.page.active {
-  display: block;
-}
-
-@keyframes pageIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* HOME HERO */
-
-#homePage {
-  text-align: center;
-}
-
-#homePage > h2 {
-  font-size: 30px;
-  margin: 20px 0 10px;
-  color: var(--cyan);
-}
-
-#homePage > p {
-  color: var(--muted);
-  margin-bottom: 25px;
-}
-
-.hero {
-  padding: 35px 20px;
-  border-radius: 20px;
-  background: linear-gradient(130deg, #123b67, #101d35);
-  border: 1px solid #28618e;
-  margin-bottom: 25px;
-}
-
-/* CLASS CARDS */
-
-.class-container {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-  margin-top: 20px;
-}
-
-.class-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 17px;
-  padding: 24px 16px;
-  transition: 0.3s;
-}
-
-.class-card:hover {
-  border-color: var(--cyan);
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px #00d5ff18;
-}
-
-.class-card h3 {
-  font-size: 24px;
-  margin-bottom: 8px;
-  color: var(--cyan);
-}
-
-.class-card p {
-  color: var(--muted);
-  margin-bottom: 15px;
-}
-
-/* SUBJECTS AND CHAPTERS */
-
-#subjectsContainer,
-#chaptersContainer {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 13px;
-  margin-top: 20px;
-}
-
-.subject-card,
-.chapter-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 15px;
-  padding: 17px;
-  cursor: pointer;
-  transition: 0.25s;
-}
-
-.subject-card:hover,
-.chapter-card:hover {
-  border-color: var(--cyan);
-  background: var(--card2);
-}
-
-#classHeading,
-#subjectHeading,
-#lessonHeading {
-  color: var(--cyan);
-  margin: 20px 0;
-}
-
-/* STUDY ROOM */
-
-#studyPage {
-  background: transparent;
-}
-
-.study-tabs {
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  padding: 10px 0 17px;
-  scrollbar-width: thin;
-}
-
-.study-tabs button {
-  flex-shrink: 0;
-  background: #1a304d;
-  color: #d8e5f4;
-}
-
-.study-tabs button:hover,
-.study-tabs button.active {
-  background: var(--primary);
-  color: white;
-}
-
-#studyContent {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 20px;
-  line-height: 1.8;
-  min-height: 150px;
-}
-
-#studyContent h3 {
-  color: var(--cyan);
-  margin: 12px 0;
-}
-
-#studyContent h4 {
-  color: #e8f4ff;
-  margin: 16px 0 5px;
-}
-
-#studyContent p {
-  margin: 9px 0;
-}
-
-#studyContent ul {
-  padding-left: 22px;
-}
-
-/* ANSWERS */
-
-.answer {
-  background: #0b1b30;
-  border-left: 3px solid var(--primary);
-  padding: 13px;
-  margin: 10px 0;
-  border-radius: 8px;
-}
-
-.question {
-  padding: 13px 0;
-  border-bottom: 1px solid var(--border);
-}
-
-.badge {
-  display: inline-block;
-  background: #163e60;
-  color: #9ce7ff;
-  border-radius: 20px;
-  padding: 4px 10px;
-  font-size: 11px;
-  margin: 3px;
-}
-
-/* MCQ */
-
-.option {
-  display: block;
-  width: 100%;
-  text-align: left;
-  background: #1a304d;
-  margin: 8px 0;
-  font-weight: normal;
-}
-
-.option.correct {
-  background: var(--success);
-}
-
-.option.wrong {
-  background: var(--danger);
-}
-
-#quizResult {
-  margin-top: 15px;
-  padding: 15px;
-  background: #0b1b30;
-  border-radius: 10px;
-}
-
-/* FOOTER */
-
-#mainFooter {
-  text-align: center;
-  color: var(--muted);
-  border-top: 1px solid var(--border);
-  padding: 25px 15px;
-  margin-top: 30px;
-}
-
-/* BACK BUTTON */
-
-.back {
-  background: #1b3453;
-  margin-bottom: 15px;
-}
-
-/* MOBILE RESPONSIVE */
-
-@media (max-width: 600px) {
-
-  #mainHeader {
-    padding: 12px 15px;
-  }
-
-  .logo h1 {
-    font-size: 21px;
-  }
-
-  nav {
-    width: 100%;
-  }
-
-  nav button {
-    flex: 1;
-    padding: 9px;
-  }
-
-  main {
-    padding: 18px 12px 40px;
-  }
-
-  .class-container {
-    grid-template-columns: 1fr;
-  }
-
-  #subjectsContainer,
-  #chaptersContainer {
-    grid-template-columns: 1fr;
-  }
-
-  #homePage > h2 {
-    font-size: 25px;
-  }
-
-  #studyContent {
-    padding: 14px;
-  }
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    function goToClasses() {
+      document.getElementById("classes").scrollIntoView({
+        behavior: "smooth"
+      });
     }
-    
+
+    function selectClass(classNumber) {
+      showNotice(
+        "Class " + classNumber + " का पूरा Study Section अगले चरण में जोड़ा जाएगा।"
+      );
+    }
+
+    function showNotice(message) {
+      const notice = document.getElementById("notice");
+      notice.textContent = message;
+      notice.style.display = "block";
+
+      clearTimeout(window.noticeTimer);
+      window.noticeTimer = setTimeout(() => {
+        notice.style.display = "none";
+      }, 3000);
+    }
+
+    function toggleMenu() {
+      document.getElementById("navLinks").classList.toggle("show");
+    }
+
+    function closeMenu() {
+      document.getElementById("navLinks").classList.remove("show");
+    }
   </script>
 
 </body>
