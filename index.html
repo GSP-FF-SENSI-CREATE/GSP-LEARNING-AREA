@@ -474,6 +474,140 @@ mcq:[
 ]
 };
  
+/* ================================
+   DYNAMIC STUDY MATERIAL
+================================ */
+
+let activeMaterial=mitrata;
+
+function tab(which,button){
+ document.querySelectorAll(".tab").forEach(x=>
+  x.classList.remove("active")
+ );
+
+ if(button)button.classList.add("active");
+
+ const content=document.getElementById("studyContent");
+
+ const ready=(
+  classNo===10 &&
+  subjectNo===0 &&
+  groupName==="गद्य खण्ड" &&
+  (lessonName.startsWith("मित्रता") ||
+   lessonName.startsWith("ममता"))
+ );
+
+ if(!ready){
+  content.innerHTML=`
+   <h3>📘 ${which.toUpperCase()}</h3>
+   <div class="answer">इस पाठ की अध्ययन सामग्री अभी जोड़ी जानी बाकी है।</div>
+  `;
+  return;
+ }
+
+ activeMaterial=lessonName.startsWith("ममता")?mamta:mitrata;
+
+ if(which==="mcq"){
+  showQuiz();
+  return;
+ }
+
+ content.innerHTML=activeMaterial[which]||
+ "सामग्री उपलब्ध नहीं है।";
+}
+
+/* ================================
+   MCQ QUIZ SYSTEM
+================================ */
+
+let qIndex=0,score=0,locked=false;
+
+function showQuiz(){
+ qIndex=0;
+ score=0;
+ locked=false;
+ drawQuestion();
+}
+
+function drawQuestion(){
+ const box=document.getElementById("studyContent");
+ const questions=activeMaterial.mcq;
+
+ if(qIndex>=questions.length){
+  box.innerHTML=`
+   <h3>🏆 Quiz Result</h3>
+   <h2>आपका स्कोर: ${score} / ${questions.length}</h2>
+   <p>${score>=8?"बहुत अच्छा! आपकी तैयारी अच्छी है।":
+   score>=5?"अच्छा प्रयास! फिर से अभ्यास करें।":
+   "Notes दोबारा पढ़ें और फिर प्रयास करें।"}</p>
+
+   <button onclick="showQuiz()">दोबारा Quiz दें</button>
+
+   <h3>उत्तर जाँच</h3>
+   ${questions.map((q,i)=>`
+    <div class="answer">
+     <b>${i+1}. ${q.q}</b><br>
+     सही उत्तर: ${q.o[q.a]}<br>
+     <small>${q.e}</small>
+    </div>
+   `).join("")}
+  `;
+  return;
+ }
+
+ const q=questions[qIndex];
+
+ box.innerHTML=`
+  <h3>📝 MCQ Quiz</h3>
+  <p class="muted">प्रश्न ${qIndex+1}/${questions.length} • स्कोर ${score}</p>
+  <h3 style="color:white">${q.q}</h3>
+
+  <div id="options">
+   ${q.o.map((x,i)=>`
+    <button class="option" onclick="choose(${i})">
+     ${"ABCD"[i]}. ${x}
+    </button>
+   `).join("")}
+  </div>
+
+  <div id="feedback"></div>
+
+  <button id="nextBtn" class="hidden" onclick="nextQ()">
+   अगला प्रश्न →
+  </button>
+ `;
+}
+
+function choose(i){
+ if(locked)return;
+ locked=true;
+
+ const q=activeMaterial.mcq[qIndex];
+
+ document.querySelectorAll("#options button").forEach((b,j)=>{
+  b.disabled=true;
+  if(j===q.a)b.classList.add("correct");
+  else if(j===i)b.classList.add("wrong");
+ });
+
+ if(i===q.a)score++;
+
+ document.getElementById("feedback").innerHTML=`
+  <div id="quizResult">
+   <b>${i===q.a?"✅ सही उत्तर!":"❌ गलत उत्तर"}</b>
+   <br>${q.e}
+  </div>
+ `;
+
+ document.getElementById("nextBtn").classList.remove("hidden");
+}
+
+function nextQ(){
+ qIndex++;
+ locked=false;
+ drawQuestion();
+  }
+ 
 /* =================================
    NAVIGATION AND RENDERING
 ================================= */
