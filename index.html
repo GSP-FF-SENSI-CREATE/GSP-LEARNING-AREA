@@ -2,882 +2,515 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#071326">
-<title>GSP LEARN</title>
-<style>
-*{box-sizing:border-box}
-body{margin:0;background:#071326;color:#f4f7ff;font-family:Arial,"Noto Sans Devanagari",sans-serif}
-header{position:sticky;top:0;z-index:5;background:#09182df2;border-bottom:1px solid #29415f;padding:16px 5%;display:flex;justify-content:space-between;align-items:center}
-.logo{font-size:24px;font-weight:900}.logo span{color:#00d5ff}
-main{max-width:1050px;margin:auto;padding:20px 15px 55px}
-.hero{padding:24px;border-radius:20px;background:linear-gradient(130deg,#123b67,#101d35);border:1px solid #28618e;margin-bottom:22px}
-.hero h1{font-size:29px;margin:5px 0 10px}.hero p{color:#c4d5e9;line-height:1.6}
-.tag{color:#75ddff;font-size:12px;font-weight:bold;letter-spacing:1px}
-h2{font-size:21px}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.card,.lesson,.panel{background:#10213a;border:1px solid #29415f;border-radius:15px;padding:16px}
-.card,.lesson{cursor:pointer}
-.card:hover,.lesson:hover{border-color:#00d5ff}
-.card .emoji{font-size:27px}.card h3{margin:8px 0 5px}.muted{color:#a9bad2;font-size:13px}
-button{background:#1687ff;color:white;border:0;padding:11px 15px;border-radius:10px;font-weight:bold;cursor:pointer}
-.back{background:#1b3453;margin-bottom:17px}
-.search{width:100%;padding:14px;border-radius:10px;background:#0b1b30;border:1px solid #29415f;color:white;margin:8px 0 17px;font-size:15px}
-.hidden{display:none!important}
-.lesson{display:flex;gap:12px;align-items:center}
-.num{background:#183c62;color:#80ddff;width:34px;height:34px;display:grid;place-items:center;border-radius:9px;flex-shrink:0}
-.tabs{display:flex;gap:8px;overflow:auto;padding:5px 0 15px}
-.tab{white-space:nowrap;background:#1a304d;color:#d8e5f4}
-.tab.active{background:#1687ff}
-.panel{padding:19px;line-height:1.75}
-.panel h3{color:#00d5ff;margin-top:0}
-.panel h4{margin-bottom:5px;color:#e8f4ff}
-.answer{background:#0b1b30;border-left:3px solid #1687ff;padding:12px;margin:9px 0;border-radius:8px}
-.question{padding:13px 0;border-bottom:1px solid #29415f}
-.option{display:block;width:100%;text-align:left;background:#1a304d;margin:7px 0;font-weight:normal}
-.option.correct{background:#12633e}
-.option.wrong{background:#8c2636}
-#quizResult{margin-top:15px;padding:13px;background:#0b1b30;border-radius:10px}
-.badge{display:inline-block;background:#163e60;color:#9ce7ff;border-radius:20px;padding:4px 9px;font-size:11px;margin:3px}
-footer{text-align:center;color:#9aabc2;border-top:1px solid #29415f;padding:24px}
-@media(min-width:650px){.grid{grid-template-columns:repeat(3,1fr)}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GSP LEARN - UP Board Class 10 और 12 की पढ़ाई के लिए Study Website">
+  <title>GSP LEARN | UP Board Study Website</title>
+
+  <!-- PART 2: CSS DESIGN इसी STYLE TAG में जोड़ा जाएगा -->
+  <style>
+    /* Basic starting styles */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6fb;
+      color: #222;
+    }
+
+    button {
+      cursor: pointer;
+    }
+  </style>
 </head>
+
 <body>
-<header>
- <div><div class="logo">GSP <span>LEARN</span></div><small class="muted">Your Smart Study Platform</small></div>
- <span class="badge">UP BOARD</span>
-</header>
 
-<main>
-<section id="home">
- <div class="hero">
-  <div class="tag">WELCOME TO GSP LEARN</div>
-  <h1>पढ़ाई अब होगी आसान!</h1>
-  <p>अपनी कक्षा चुनें और सभी विषयों के अध्यायों की तैयारी करें।</p>
- </div>
- <h2>अपनी कक्षा चुनें</h2>
- <div class="grid" id="classGrid"></div>
-</section>
-
-<section id="subjectsPage" class="hidden">
- <button class="back" onclick="home()">← वापस</button>
- <div class="hero"><div class="tag">YOUR CLASS</div><h1 id="classTitle"></h1><p>अपना विषय चुनें।</p></div>
- <div class="panel" id="classMessage"></div>
- <div class="grid" id="subjectGrid"></div>
-</section>
-
-<section id="lessonsPage" class="hidden">
- <button class="back" onclick="subjects()">← विषयों पर वापस</button>
- <h2 id="subjectTitle"></h2>
- <input class="search" id="search" placeholder="अध्याय खोजें..." oninput="renderLessons()">
- <div id="lessonGrid" class="grid"></div>
-</section>
-
-<section id="studyPage" class="hidden">
- <button class="back" onclick="lessons()">← अध्यायों पर वापस</button>
- <div class="hero">
-  <div class="tag">STUDY ROOM</div>
-  <h2 id="lessonTitle"></h2>
-  <p id="lessonInfo"></p>
- </div>
- <div class="tabs">
-  <button class="tab active" onclick="tab('theory',this)">Theory</button>
-  <button class="tab" onclick="tab('qa',this)">प्रश्न-उत्तर</button>
-  <button class="tab" onclick="tab('important',this)">Important Q.</button>
-  <button class="tab" onclick="tab('mcq',this)">MCQ Quiz</button>
-  <button class="tab" onclick="tab('notes',this)">Short Notes</button>
-  <button class="tab" onclick="tab('pyq',this)">PYQ</button>
- </div>
- <div class="panel" id="studyContent"></div>
-</section>
-</main>
-
-<footer>
- <div class="logo">GSP <span>LEARN</span></div>
- <p>Study Smart • Learn Better • Grow Faster</p>
-</footer>
-
-<script>
-/* ================================
-   SUBJECTS AND CHAPTERS
-================================ */
-
-const curriculum={
-10:[
- ["Hindi","📖",[
-  ["गद्य खण्ड",[
-   "मित्रता — आचार्य रामचन्द्र शुक्ल","ममता — जयशंकर प्रसाद",
-   "भारतीय संस्कृति — डॉ. राजेन्द्र प्रसाद","अजंता — भगवतशरण उपाध्याय",
-   "क्या लिखूँ — पदुमलाल पुन्नालाल बख्शी",
-   "ईर्ष्या तू न गई मेरे मन से — रामधारी सिंह दिनकर",
-   "पानी में चन्दा और चाँद पर आदमी — जयप्रकाश भारती"]],
-  ["काव्य / पद्य खण्ड",[
-   "पद — सूरदास","धनुष भंग, वन पथ पर — तुलसीदास",
-   "सवैये, कवित्त — रसखान","भक्ति, नीति — बिहारी लाल",
-   "स्वदेश प्रेम — रामनरेश त्रिपाठी","भारत माता का मंदिर यह — मैथिलीशरण गुप्त",
-   "हिमालय से, वर्षा सुन्दरी के प्रति — महादेवी वर्मा",
-   "चींटी, चन्द्रलोक में प्रथम बार — सुमित्रानंदन पंत",
-   "पुष्प की अभिलाषा, जवानी — माखनलाल चतुर्वेदी",
-   "झाँसी की रानी की समाधि पर — सुभद्रा कुमारी चौहान",
-   "भाषा एकमात्र अनन्त है, युवा जंगल — अशोक वाजपेयी",
-   "हल्दी घाटी — श्याम नारायण पाण्डेय","नदी — केदारनाथ सिंह"]],
-  ["संस्कृत खण्ड",[
-   "वाराणसी","अन्योक्तिविलासः","वीरः वीरेण पूज्यते","प्रबुद्धो ग्रामीणः",
-   "देशभक्तः चन्द्रशेखरः","केन किं वर्धते","आरुणिः श्वेतकेतुः संवादः",
-   "भारतीय संस्कृति","जीवन सूत्राणि"]]
- ]],
- ["English","🔤",[
-  ["First Flight – Prose",[
-   "A Letter to God","Nelson Mandela: Long Walk to Freedom",
-   "Two Stories about Flying","From the Diary of Anne Frank",
-   "Glimpses of India","Mijbil the Otter","Madam Rides the Bus",
-   "The Sermon at Benares","The Proposal"]],
-  ["First Flight – Poetry",[
-   "Dust of Snow","Fire and Ice","A Tiger in the Zoo",
-   "How to Tell Wild Animals","The Ball Poem","Amanda!",
-   "The Trees","Fog","The Tale of Custard the Dragon","For Anne Gregory"]],
-  ["Footprints Without Feet",[
-   "A Triumph of Surgery","The Thief's Story","The Midnight Visitor",
-   "A Question of Trust","Footprints Without Feet","The Making of a Scientist",
-   "The Necklace","Bholi","The Book That Saved the Earth"]]
- ]],
- ["Science","🔬",[
-  ["रसायन विज्ञान",["रासायनिक अभिक्रियाएँ एवं समीकरण","अम्ल, क्षारक एवं लवण","धातु एवं अधातु","कार्बन एवं उसके यौगिक"]],
-  ["जीव विज्ञान",["जैव प्रक्रम","नियंत्रण एवं समन्वय","जीव जनन कैसे करते हैं?","आनुवंशिकता"]],
-  ["भौतिक विज्ञान",["प्रकाश – परावर्तन तथा अपवर्तन","मानव नेत्र तथा रंग-बिरंगा संसार","विद्युत","विद्युत धारा का चुंबकीय प्रभाव"]],
-  ["पर्यावरण",["हमारा पर्यावरण"]]
- ]],
- ["Social Science","🌍",[
-  ["इतिहास",["यूरोप में राष्ट्रवाद का उदय","भारत में राष्ट्रवाद","भूमंडलीकृत विश्व का बनना","औद्योगीकरण का युग","मुद्रण संस्कृति और आधुनिक दुनिया"]],
-  ["भूगोल",["संसाधन एवं विकास","वन एवं वन्य जीव संसाधन","जल संसाधन","कृषि","खनिज तथा ऊर्जा संसाधन","विनिर्माण उद्योग","राष्ट्रीय अर्थव्यवस्था की जीवन रेखाएँ"]],
-  ["नागरिकशास्त्र",["सत्ता की साझेदारी","संघवाद","जाति, धर्म और लैंगिक मसले","राजनीतिक दल","लोकतंत्र के परिणाम"]],
-  ["अर्थशास्त्र",["विकास","भारतीय अर्थव्यवस्था के क्षेत्रक","मुद्रा और साख","वैश्वीकरण और भारतीय अर्थव्यवस्था","उपभोक्ता अधिकार"]]
- ]],
- ["Mathematics","📐",[["गणित",[
-  "वास्तविक संख्याएँ","बहुपद","दो चर वाले रैखिक समीकरण युग्म",
-  "द्विघात समीकरण","समांतर श्रेढ़ियाँ","त्रिभुज","निर्देशांक ज्यामिति",
-  "त्रिकोणमिति का परिचय","त्रिकोणमिति के कुछ अनुप्रयोग","वृत्त",
-  "वृत्तों से संबंधित क्षेत्रफल","पृष्ठीय क्षेत्रफल और आयतन","सांख्यिकी","प्रायिकता"
- ]]]],
- ["Drawing","🎨",[["चित्रकला",[
-  "बहुविकल्पीय प्रश्न","भारतीय चित्रकला का इतिहास एवं विशेषताएँ",
-  "प्राकृतिक दृश्य चित्रण","आलेखन कला","प्राविधिक कला","स्मृति चित्रण"
- ]]]]
-],
-12:[
- ["Hindi","📖",[
-  ["गद्य खण्ड",[
-   "राष्ट्र का स्वरूप — वासुदेवशरण अग्रवाल",
-   "रॉबर्ट नर्सिंग होम में — कन्हैयालाल मिश्र प्रभाकर",
-   "अशोक के फूल — हजारी प्रसाद द्विवेदी",
-   "सिद्धांत और नीति — दीनदयाल उपाध्याय",
-   "भाषा और आधुनिकता — जी. सुंदर रेड्डी",
-   "तेजस्वी मन — ए.पी.जे. अब्दुल कलाम",
-   "भाग्य और पुरुषार्थ — जैनेंद्र कुमार","निंदा रस — हरिशंकर परसाई"]],
-  ["काव्य खण्ड",[
-   "प्रेम माधुरी, यमुना-छवि","उद्धव प्रसंग, गंगावतरण","पवन दूतिका",
-   "कैकेयी का अनुताप, गीत","गीत, श्रद्धा-मधु","बादल-राग, संध्या-सुन्दरी",
-   "नौका विहार, बापू के प्रति, परिवर्तन","गीत — महादेवी वर्मा",
-   "दिनकर की निर्धारित कविताएँ","अभिनव-मनुष्य, पुरुरवा, उर्वशी","विविध कविताएँ"]],
-  ["कथा साहित्य",[
-   "पंचलाइट — फणीश्वरनाथ रेणु","बहादुर — अमरकांत",
-   "निर्धारित पाठ — शिवप्रसाद सिंह","निर्धारित पाठ — भीष्म साहनी",
-   "कर्मनाशा की हार, खून का रिश्ता, लाटी — शिवानी"]],
-  ["खण्डकाव्य",["मुक्ति यज्ञ","सत्य की जीत","रश्मि रथी","आलोकवृत्त","त्यागपथी","श्रवण कुमार"]]
- ]],
- ["English","🔤",[
-  ["Flamingo – Prose",[
-   "The Last Lesson","Lost Spring","Deep Water","The Rattrap","Indigo",
-   "Poets and Pancakes","The Interview","Going Places"]],
-  ["Flamingo – Poetry",[
-   "My Mother at Sixty-Six","Keeping Quiet","A Thing of Beauty",
-   "A Roadside Stand","Aunt Jennifer's Tigers"]],
-  ["Vistas",[
-   "The Third Level","The Tiger King","Journey to the End of the Earth",
-   "The Enemy","On the Face of It","Memories of Childhood"]]
- ]],
- ["Physics","⚡",[["भौतिक विज्ञान",[
-  "वैद्युत आवेश तथा क्षेत्र","स्थिर वैद्युत विभव तथा धारिता","विद्युत धारा",
-  "गतिमान आवेश और चुंबकत्व","चुंबकत्व एवं द्रव्य","वैद्युत चुंबकीय प्रेरण",
-  "प्रत्यावर्ती धारा","वैद्युत चुंबकीय तरंगें","किरण प्रकाशिकी एवं प्रकाशिक यंत्र",
-  "तरंग प्रकाशिकी","विकिरण तथा द्रव्य की द्वैत प्रकृति","परमाणु","नाभिक",
-  "अर्धचालक इलेक्ट्रॉनिकी"
- ]]]],
- ["Chemistry","🧪",[["रसायन विज्ञान",[
-  "विलयन","वैद्युत रसायन","रासायनिक बलगतिकी","d एवं f-ब्लॉक के तत्व",
-  "उपसहसंयोजन यौगिक","हैलोऐल्केन और हैलोएरीन",
-  "ऐल्कोहॉल, फिनॉल एवं ईथर","ऐल्डिहाइड, कीटोन एवं कार्बोक्सिलिक अम्ल",
-  "ऐमीन","जैव अणु"
- ]]]],
- ["Biology","🧬",[["जीव विज्ञान",[
-  "पुष्पी पौधों में लैंगिक प्रजनन","मानव जनन","जनन स्वास्थ्य",
-  "वंशागति तथा विविधता के सिद्धांत","वंशागति का आणविक आधार","विकास",
-  "मानव स्वास्थ्य तथा रोग","मानव कल्याण में सूक्ष्मजीव",
-  "जैव प्रौद्योगिकी – सिद्धांत व प्रक्रम","जैव प्रौद्योगिकी एवं उसके उपयोग",
-  "जीव और समष्टियाँ","पारितंत्र","जैव विविधता एवं संरक्षण"
- ]]]],
- ["Mathematics","📐",[["गणित",[
-  "संबंध तथा फलन","प्रतिलोम त्रिकोणमितीय फलन","आव्यूह","सारणिक",
-  "सांतत्य तथा अवकलनीयता","अवकलज के अनुप्रयोग","समाकलन",
-  "समाकलनों के अनुप्रयोग","अवकल समीकरण","सदिश बीजगणित",
-  "त्रिविमीय ज्यामिति","रैखिक प्रोग्रामन","प्रायिकता"
- ]]]]
-],
-9:[],11:[]
-};
-
-/* =================================
-   REAL STUDY MATERIAL: CLASS 10 HINDI
-   CHAPTER 1: MITRATA
-================================= */
-
-const mitrata={
-theory:`
-<h3>📚 मित्रता – विस्तृत अध्ययन</h3>
-<p><b>लेखक:</b> आचार्य रामचन्द्र शुक्ल</p>
-<p><b>विधा:</b> विचारात्मक एवं भावात्मक निबंध</p>
-<h4>1. पाठ का परिचय</h4>
-<p>‘मित्रता’ निबंध में लेखक ने सच्ची मित्रता, मित्र के चुनाव, अच्छी और बुरी संगति तथा मनुष्य के चरित्र पर मित्रों के प्रभाव का विवेचन किया है। लेखक के अनुसार मित्रता केवल साथ घूमने या बातचीत करने का नाम नहीं है। सच्चा मित्र वह है जो हमारे हित की चिंता करे और आवश्यकता पड़ने पर हमें गलत कार्य से रोके।</p>
-<h4>2. मित्र चुनने का महत्व</h4>
-<p>मनुष्य सामाजिक प्राणी है। जीवन में उसे अनेक लोगों से मिलना-जुलना पड़ता है। सभी परिचित व्यक्ति सच्चे मित्र नहीं होते। इसलिए मित्र बनाते समय उसके स्वभाव, विचारों और आचरण को समझना चाहिए।</p>
-<h4>3. संगति का प्रभाव</h4>
-<p>मनुष्य जिन लोगों के साथ अधिक समय बिताता है, उनके विचारों और आदतों का प्रभाव उस पर पड़ता है। अच्छी संगति व्यक्ति को सदाचार, परिश्रम और उन्नति की ओर प्रेरित करती है। बुरी संगति धीरे-धीरे विवेक और चरित्र को कमजोर कर सकती है।</p>
-<h4>4. सच्चे मित्र के गुण</h4>
-<ul>
-<li>वह हमारे हित की बात सोचता है।</li>
-<li>वह हमारी गलतियों को बताने का साहस रखता है।</li>
-<li>वह कठिन समय में साथ देता है।</li>
-<li>वह हमें अच्छे कार्यों के लिए प्रेरित करता है।</li>
-<li>वह केवल खुश करने के लिए झूठी प्रशंसा नहीं करता।</li>
-</ul>
-<h4>5. चापलूस और सच्चे मित्र में अंतर</h4>
-<p>चापलूस व्यक्ति हर बात में प्रशंसा करता है, जबकि सच्चा मित्र आवश्यकता पड़ने पर हमारी भूल भी बताता है। सच्चे मित्र का उद्देश्य हमारा भला करना होता है।</p>
-<h4>6. पाठ का संदेश</h4>
-<p>हमें मित्रों का चुनाव सोच-समझकर करना चाहिए। अच्छी संगति अपनानी चाहिए और स्वयं भी दूसरों के लिए सच्चा, विश्वसनीय तथा हितैषी मित्र बनना चाहिए।</p>
-<h4>लेखक परिचय</h4>
-<p>आचार्य रामचन्द्र शुक्ल हिंदी के प्रमुख निबंधकार और आलोचक थे। उनकी प्रसिद्ध रचनाओं में ‘चिंतामणि’ तथा ‘हिंदी साहित्य का इतिहास’ शामिल हैं। उनकी भाषा गंभीर, विचारप्रधान और प्रभावशाली है।</p>
-`,
-qa:`
-<h3>✍️ प्रश्न-उत्तर</h3>
-<div class="question"><b>प्रश्न 1. ‘मित्रता’ पाठ के लेखक कौन हैं?</b><div class="answer">उत्तर: ‘मित्रता’ पाठ के लेखक आचार्य रामचन्द्र शुक्ल हैं।</div></div>
-<div class="question"><b>प्रश्न 2. मित्र का चुनाव सोच-समझकर क्यों करना चाहिए?</b><div class="answer">उत्तर: मित्र का हमारे विचारों, आदतों और चरित्र पर प्रभाव पड़ता है। इसलिए हमें ऐसे व्यक्ति को मित्र बनाना चाहिए जिसका आचरण अच्छा हो और जो हमारा हित चाहता हो।</div></div>
-<div class="question"><b>प्रश्न 3. सच्चे मित्र का क्या कर्तव्य है?</b><div class="answer">उत्तर: सच्चे मित्र का कर्तव्य है कि वह अपने मित्र का साहस और उत्साह बढ़ाए, अच्छे कार्यों में सहायता करे तथा गलत कार्यों से रोके।</div></div>
-<div class="question"><b>प्रश्न 4. अच्छी संगति का क्या प्रभाव पड़ता है?</b><div class="answer">उत्तर: अच्छी संगति से व्यक्ति के विचार और व्यवहार अच्छे बनते हैं। वह सदाचार, परिश्रम और उन्नति की ओर बढ़ता है।</div></div>
-<div class="question"><b>प्रश्न 5. चापलूस व्यक्ति सच्चा मित्र क्यों नहीं होता?</b><div class="answer">उत्तर: चापलूस व्यक्ति केवल प्रसन्न करने के लिए प्रशंसा करता है। वह हमारी गलतियों को नहीं बताता। इसलिए वह हमारा वास्तविक हितैषी नहीं होता।</div></div>
-<div class="question"><b>प्रश्न 6. ‘मित्रता’ निबंध का मुख्य संदेश लिखिए।</b><div class="answer">उत्तर: इस निबंध का संदेश है कि मित्र का चुनाव सावधानी से करना चाहिए। अच्छी संगति अपनानी चाहिए और सच्चे मित्र की तरह दूसरों के हित का ध्यान रखना चाहिए।</div></div>
-`,
-important:`
-<h3>⭐ अति महत्वपूर्ण प्रश्न</h3>
-<div class="question"><b>1. ‘मित्रता’ निबंध का सारांश लिखिए।</b><div class="answer">उत्तर: ‘मित्रता’ आचार्य रामचन्द्र शुक्ल का विचारात्मक निबंध है। इसमें लेखक ने मित्रता और संगति के महत्व को समझाया है। मनुष्य के विचारों और चरित्र पर उसके मित्रों का प्रभाव पड़ता है। अच्छी संगति उन्नति में सहायक होती है, जबकि बुरी संगति पतन का कारण बन सकती है। सच्चा मित्र वही है जो हित की बात कहे, गलतियों को बताए और कठिन समय में साथ दे। इसलिए मित्र चुनते समय सावधानी रखनी चाहिए।</div></div>
-<div class="question"><b>2. सच्चे मित्र और चापलूस में अंतर स्पष्ट कीजिए।</b><div class="answer">उत्तर: सच्चा मित्र हमारे हित की चिंता करता है। वह आवश्यकता पड़ने पर हमारी गलतियों को बताता है और सुधारने में सहायता करता है। इसके विपरीत चापलूस व्यक्ति केवल प्रशंसा करता है और हमारी कमियों को छिपाता है। इसलिए सच्चा मित्र हितैषी होता है, चापलूस नहीं।</div></div>
-<div class="question"><b>3. अच्छी और बुरी संगति के प्रभाव लिखिए।</b><div class="answer">उत्तर: अच्छी संगति व्यक्ति में अच्छे विचार, अनुशासन और सदाचार विकसित करती है। बुरी संगति व्यक्ति को गलत आदतों की ओर ले जा सकती है तथा उसके विवेक और चरित्र को कमजोर कर सकती है।</div></div>
-<div class="question"><b>4. आचार्य रामचन्द्र शुक्ल का साहित्यिक परिचय दीजिए।</b><div class="answer">उत्तर: आचार्य रामचन्द्र शुक्ल हिंदी साहित्य के प्रसिद्ध निबंधकार और आलोचक थे। उनकी प्रमुख रचनाओं में ‘चिंतामणि’ और ‘हिंदी साहित्य का इतिहास’ शामिल हैं। उनकी भाषा गंभीर, विचारप्रधान तथा प्रभावशाली है।</div></div>
-<div class="question"><b>5. मित्रता का जीवन में क्या महत्व है?</b><div class="answer">उत्तर: मित्रता मनुष्य को सहयोग, विश्वास और आत्मीयता प्रदान करती है। सच्चा मित्र कठिन समय में सहारा देता है और अच्छे कार्यों के लिए प्रेरित करता है। इसलिए जीवन में अच्छी मित्रता का विशेष महत्व है।</div></div>
-`,
-notes:`
-<h3>📒 Short Notes – Quick Revision</h3>
-<p><span class="badge">लेखक</span> आचार्य रामचन्द्र शुक्ल</p>
-<p><span class="badge">विधा</span> विचारात्मक एवं भावात्मक निबंध</p>
-<p><span class="badge">मुख्य विषय</span> मित्रता और संगति का प्रभाव</p>
-<h4>याद रखने योग्य बातें</h4>
-<ul>
-<li>मित्र का चुनाव सोच-समझकर करना चाहिए।</li>
-<li>संगति का प्रभाव विचारों और चरित्र पर पड़ता है।</li>
-<li>सच्चा मित्र हितैषी होता है।</li>
-<li>चापलूस केवल प्रशंसा करता है।</li>
-<li>अच्छी संगति उन्नति में सहायक है।</li>
-<li>बुरी संगति से बचना चाहिए।</li>
-</ul>
-<h4>एक पंक्ति में उत्तर</h4>
-<p><b>पाठ का संदेश:</b> अच्छी संगति अपनाओ और सच्चे मित्र बनो।</p>
-`,
-pyq:`
-<h3>📜 पिछले प्रश्नपत्रों के आधार पर अभ्यास</h3>
-<p class="muted">नीचे प्रश्नों को परीक्षा में प्रचलित प्रश्न-प्रकार के अनुसार अपने शब्दों में तैयार किया गया है। इन्हें किसी वर्ष का शब्दशः प्रश्नपत्र बताकर प्रस्तुत नहीं किया जा रहा।</p>
-<div class="question"><b>1. ‘मित्रता’ पाठ और लेखक का नाम लिखिए।</b><div class="answer">उत्तर: पाठ – मित्रता। लेखक – आचार्य रामचन्द्र शुक्ल।</div></div>
-<div class="question"><b>2. सच्चे मित्र का कर्तव्य क्या होना चाहिए?</b><div class="answer">उत्तर: मित्र का साहस और उत्साह बढ़ाना, उसके हित की चिंता करना तथा उसे अच्छे कार्यों में सहायता देना।</div></div>
-<div class="question"><b>3. बुरी संगति व्यक्ति को किस प्रकार प्रभावित कर सकती है?</b><div class="answer">उत्तर: बुरी संगति व्यक्ति के विचार, आदत और चरित्र को गलत दिशा में प्रभावित कर सकती है।</div></div>
-<div class="question"><b>4. चापलूस व्यक्ति की पहचान क्या है?</b><div class="answer">उत्तर: वह व्यक्ति जो केवल प्रशंसा करता है और मित्र की गलतियों को बताने से बचता है।</div></div>
-<div class="question"><b>5. ‘मित्रता’ पाठ का केंद्रीय भाव स्पष्ट कीजिए।</b><div class="answer">उत्तर: मित्र का चुनाव सावधानी से करना चाहिए, क्योंकि संगति का प्रभाव मनुष्य के चरित्र पर पड़ता है।</div></div>
-`,
-mcq:[
- {q:"‘मित्रता’ पाठ के लेखक कौन हैं?",o:["जयशंकर प्रसाद","आचार्य रामचन्द्र शुक्ल","रामधारी सिंह दिनकर","प्रेमचंद"],a:1,e:"‘मित्रता’ निबंध के लेखक आचार्य रामचन्द्र शुक्ल हैं।"},
- {q:"‘मित्रता’ किस विधा की रचना है?",o:["कहानी","नाटक","विचारात्मक निबंध","उपन्यास"],a:2,e:"यह विचारात्मक एवं भावात्मक निबंध है।"},
- {q:"सच्चा मित्र किसका ध्यान रखता है?",o:["केवल मनोरंजन","मित्र के हित","केवल धन","अपनी प्रशंसा"],a:1,e:"सच्चा मित्र अपने मित्र के हित की चिंता करता है।"},
- {q:"चापलूस व्यक्ति सामान्यतः क्या करता है?",o:["सुधार करता है","सच बोलता है","केवल प्रशंसा करता है","सहायता करता है"],a:2,e:"चापलूस व्यक्ति प्रसन्न करने के लिए प्रशंसा करता है।"},
- {q:"अच्छी संगति का परिणाम क्या हो सकता है?",o:["उन्नति","आलस्य","अविवेक","हानिकारक आदतें"],a:0,e:"अच्छी संगति व्यक्ति को उन्नति की ओर प्रेरित करती है।"},
- {q:"मित्र का चुनाव कैसे करना चाहिए?",o:["जल्दबाजी में","दिखावे से","सोच-समझकर","बिना जाने"],a:2,e:"मित्र के स्वभाव और आचरण को समझकर चुनाव करना चाहिए।"},
- {q:"सच्चा मित्र गलती होने पर क्या करता है?",o:["छिपाता है","सुधारने में सहायता करता है","मजाक उड़ाता है","साथ छोड़ देता है"],a:1,e:"सच्चा मित्र गलती बताकर सुधारने में मदद करता है।"},
- {q:"लेखक का प्रमुख संदेश क्या है?",o:["धन कमाना","मित्रता से बचना","अच्छी संगति अपनाना","सबसे अलग रहना"],a:2,e:"लेखक अच्छी संगति और सावधानी से मित्र चुनने पर बल देते हैं।"},
- {q:"आचार्य रामचन्द्र शुक्ल किस रूप में प्रसिद्ध हैं?",o:["वैज्ञानिक","निबंधकार और आलोचक","चित्रकार","संगीतकार"],a:1,e:"वे हिंदी के प्रमुख निबंधकार और आलोचक थे।"},
- {q:"‘चिंतामणि’ किसकी रचना है?",o:["आचार्य रामचन्द्र शुक्ल","सूरदास","तुलसीदास","महादेवी वर्मा"],a:0,e:"‘चिंतामणि’ आचार्य रामचन्द्र शुक्ल की प्रसिद्ध रचना है।"}
-]
-};
-
-/* =================================
-   CLASS 10 HINDI - LESSON 2
-   MAMTA - JAISHANKAR PRASAD
-================================= */
-
-const mamta={
-
-theory:`
-<h3>📚 ममता – विस्तृत अध्ययन</h3>
-<p><b>लेखक:</b> जयशंकर प्रसाद</p>
-<p><b>विधा:</b> ऐतिहासिक कहानी</p>
-<p><b>मुख्य पात्र:</b> ममता, चूड़ामणि, हुमायूँ</p>
-
-<h4>1. कहानी का परिचय</h4>
-<p>‘ममता’ जयशंकर प्रसाद की प्रसिद्ध ऐतिहासिक कहानी है। इसमें ममता नामक एक विधवा स्त्री के स्वाभिमान, त्याग, धर्मनिष्ठा और मानवता का सुंदर चित्रण किया गया है। कहानी की पृष्ठभूमि शेरशाह सूरी के समय का रोहतास दुर्ग है।</p>
-
-<h4>2. ममता का परिचय</h4>
-<p>ममता रोहतास दुर्ग के मंत्री चूड़ामणि की इकलौती पुत्री थी। वह कम उम्र में विधवा हो गई थी। उसके पास सुख-सुविधाओं की कमी नहीं थी, फिर भी वैधव्य के कारण वह दुखी रहती थी।</p>
-
-<h4>3. चूड़ामणि द्वारा स्वर्ण स्वीकार करना</h4>
-<p>चूड़ामणि अपनी पुत्री के भविष्य की चिंता करते थे। उन्होंने शेरशाह के पक्ष से मिले स्वर्ण को स्वीकार कर लिया और उसे ममता के लिए उपहार के रूप में लाए। ममता ने स्वर्ण देखकर पूछा कि क्या यह अनुचित धन है। उसने इसे स्वीकार करने से मना कर दिया और वापस करने को कहा।</p>
-
-<h4>4. रोहतास दुर्ग पर आक्रमण</h4>
-<p>शेरशाह की सेना ने छलपूर्वक डोलियों में सैनिक छिपाकर दुर्ग में प्रवेश किया। इस घटना के दौरान चूड़ामणि मारे गए और दुर्ग पर शेरशाह का अधिकार हो गया। ममता वहाँ से निकलकर काशी के उत्तर में एक खंडहर के पास झोपड़ी बनाकर रहने लगी।</p>
-
-<h4>5. हुमायूँ को आश्रय</h4>
-<p>एक दिन एक थका हुआ मुगल यात्री ममता की झोपड़ी में आश्रय माँगने आया। वह चौसा के युद्ध में शेरशाह से पराजित होकर आया था। ममता ने पहले संकोच किया, लेकिन अतिथि-धर्म और मानवता के कारण उसे अपनी झोपड़ी में आश्रय दे दिया। वह यात्री बाद में हुमायूँ के रूप में पहचाना गया।</p>
-
-<h4>6. कहानी का अंतिम प्रसंग</h4>
-<p>लगभग सैंतालीस वर्ष बाद एक अश्वारोही उस स्थान पर आया जहाँ हुमायूँ ने कभी आश्रय लिया था। ममता ने उसे बताया कि एक दिन एक मुगल बादशाह उसकी झोपड़ी में ठहरा था। बाद में वहाँ अकबर ने अपने पिता हुमायूँ की स्मृति में एक अष्टकोण मंदिर बनवाया, लेकिन उस पर ममता का नाम नहीं लिखा गया।</p>
-
-<h4>7. ममता का चरित्र-चित्रण</h4>
-<ul>
-<li>स्वाभिमानी – अनुचित स्वर्ण स्वीकार नहीं करती।</li>
-<li>धर्मनिष्ठ – अपने सिद्धांतों पर दृढ़ रहती है।</li>
-<li>दयालु – संकट में पड़े यात्री को आश्रय देती है।</li>
-<li>त्यागमयी – बिना किसी लाभ की इच्छा के सहायता करती है।</li>
-<li>मानवतावादी – अतिथि के प्रति मानवता का व्यवहार करती है।</li>
-</ul>
-
-<h4>8. कहानी का उद्देश्य और संदेश</h4>
-<p>कहानी का संदेश है कि धन और सत्ता से अधिक महत्वपूर्ण मानवता, स्वाभिमान और त्याग हैं। किसी की सहायता बिना किसी स्वार्थ के करना ही सच्ची महानता है।</p>
-
-<h4>9. लेखक परिचय</h4>
-<p>जयशंकर प्रसाद हिंदी साहित्य के प्रमुख कवि, नाटककार और कहानीकार थे। वे छायावाद के प्रमुख स्तंभों में गिने जाते हैं। उनकी प्रसिद्ध रचनाओं में कामायनी, आँसू, लहर और स्कंदगुप्त शामिल हैं।</p>
-`,
-
-qa:`
-<h3>✍️ ममता – प्रश्न एवं उत्तर</h3>
-
-<div class="question"><b>प्रश्न 1. ममता कहानी के लेखक कौन हैं?</b><div class="answer">उत्तर: ममता कहानी के लेखक जयशंकर प्रसाद हैं।</div></div>
-
-<div class="question"><b>प्रश्न 2. ममता कौन थी?</b><div class="answer">उत्तर: ममता रोहतास दुर्ग के मंत्री चूड़ामणि की इकलौती विधवा पुत्री थी।</div></div>
-
-<div class="question"><b>प्रश्न 3. चूड़ामणि कौन थे?</b><div class="answer">उत्तर: चूड़ामणि रोहतास दुर्ग के मंत्री तथा ममता के पिता थे।</div></div>
-
-<div class="question"><b>प्रश्न 4. ममता ने स्वर्ण स्वीकार करने से मना क्यों किया?</b><div class="answer">उत्तर: ममता उस स्वर्ण को अनुचित धन मानती थी। वह अपने सिद्धांतों और स्वाभिमान के विरुद्ध प्राप्त धन स्वीकार नहीं करना चाहती थी।</div></div>
-
-<div class="question"><b>प्रश्न 5. रोहतास दुर्ग पर किसने अधिकार किया?</b><div class="answer">उत्तर: शेरशाह सूरी ने छलपूर्वक रोहतास दुर्ग पर अधिकार किया।</div></div>
-
-<div class="question"><b>प्रश्न 6. ममता कहाँ जाकर रहने लगी?</b><div class="answer">उत्तर: ममता काशी के उत्तर में एक पुराने खंडहर के पास झोपड़ी बनाकर रहने लगी।</div></div>
-
-<div class="question"><b>प्रश्न 7. ममता की झोपड़ी में किसने आश्रय लिया?</b><div class="answer">उत्तर: हुमायूँ ने एक मुगल यात्री के रूप में ममता की झोपड़ी में आश्रय लिया था।</div></div>
-
-<div class="question"><b>प्रश्न 8. ममता ने यात्री को आश्रय क्यों दिया?</b><div class="answer">उत्तर: ममता ने अतिथि-धर्म, दया और मानवता के कारण उस संकटग्रस्त यात्री को आश्रय दिया।</div></div>
-
-<div class="question"><b>प्रश्न 9. हुमायूँ की स्मृति में किसने मंदिर बनवाया?</b><div class="answer">उत्तर: अकबर ने अपने पिता हुमायूँ की स्मृति में वहाँ अष्टकोण मंदिर बनवाया।</div></div>
-
-<div class="question"><b>प्रश्न 10. कहानी के अंत में ममता की क्या विडंबना दिखाई गई है?</b><div class="answer">उत्तर: ममता ने हुमायूँ को आश्रय दिया था, लेकिन उसकी स्मृति में बने मंदिर पर ममता का नाम कहीं अंकित नहीं किया गया।</div></div>
-`,
-
-important:`
-<h3>⭐ अति महत्वपूर्ण प्रश्न</h3>
-
-<div class="question"><b>1. ममता का चरित्र-चित्रण कीजिए।</b><div class="answer">उत्तर: ममता जयशंकर प्रसाद की कहानी की प्रमुख पात्र है। वह चूड़ामणि की विधवा पुत्री है। वह स्वाभिमानी, धर्मनिष्ठ, दयालु और त्यागमयी स्त्री है। वह अनुचित स्वर्ण को स्वीकार नहीं करती। बाद में शत्रु पक्ष से जुड़े संकटग्रस्त यात्री को भी आश्रय देती है। उसके चरित्र से मानवता और अतिथि-धर्म की शिक्षा मिलती है।</div></div>
-
-<div class="question"><b>2. ममता ने स्वर्ण को अनर्थ क्यों कहा?</b><div class="answer">उत्तर: ममता समझती थी कि यह स्वर्ण अनुचित तरीके से प्राप्त किया गया है। उसके अनुसार धन के लालच में अपने सिद्धांतों और कर्तव्य से समझौता करना गलत है। इसलिए उसने इसे अनर्थ माना।</div></div>
-
-<div class="question"><b>3. ममता ने हुमायूँ की सहायता किस प्रकार की?</b><div class="answer">उत्तर: जब हुमायूँ पराजित होकर थका हुआ ममता की झोपड़ी में पहुँचा, तब ममता ने उसे आश्रय दिया। उसने अपनी कठिन परिस्थितियों के बावजूद अतिथि-धर्म का पालन किया।</div></div>
-
-<div class="question"><b>4. कहानी का शीर्षक ‘ममता’ कितना सार्थक है?</b><div class="answer">उत्तर: कहानी का शीर्षक पूर्णतः सार्थक है। पूरी कहानी ममता के चरित्र, स्वाभिमान, त्याग, दया और मानवता के आसपास घूमती है। उसके व्यवहार में ममता और करुणा का भाव दिखाई देता है।</div></div>
-
-<div class="question"><b>5. कहानी का मुख्य उद्देश्य स्पष्ट कीजिए।</b><div class="answer">उत्तर: कहानी का उद्देश्य मानवता, स्वाभिमान, त्याग और अतिथि-सत्कार के महत्व को बताना है। लेखक दिखाते हैं कि सच्ची महानता धन या पद में नहीं, बल्कि अच्छे चरित्र और निस्वार्थ सेवा में होती है।</div></div>
-
-<div class="question"><b>6. कहानी के अंत में ममता का नाम मंदिर पर क्यों नहीं मिलता?</b><div class="answer">उत्तर: मंदिर हुमायूँ की स्मृति में बनवाया गया था। उस पर हुमायूँ का उल्लेख था, लेकिन जिस ममता ने उसे आश्रय दिया था, उसका नाम दर्ज नहीं किया गया। यह इतिहास में त्याग करने वाले साधारण लोगों की उपेक्षा को दर्शाता है।</div></div>
-
-<div class="question"><b>7. जयशंकर प्रसाद का साहित्यिक परिचय लिखिए।</b><div class="answer">उत्तर: जयशंकर प्रसाद हिंदी साहित्य के महान कवि, नाटककार और कहानीकार थे। वे छायावाद के प्रमुख स्तंभ थे। उनकी प्रमुख रचनाएँ कामायनी, आँसू, लहर और स्कंदगुप्त हैं। उनकी भाषा साहित्यिक, भावपूर्ण और प्रभावशाली है।</div></div>
-`,
-
-notes:`
-<h3>📒 Short Notes – त्वरित पुनरावृत्ति</h3>
-
-<p><span class="badge">लेखक</span> जयशंकर प्रसाद</p>
-<p><span class="badge">विधा</span> ऐतिहासिक कहानी</p>
-<p><span class="badge">नायिका</span> ममता</p>
-<p><span class="badge">पिता</span> चूड़ामणि</p>
-<p><span class="badge">ऐतिहासिक पात्र</span> शेरशाह सूरी और हुमायूँ</p>
-<p><span class="badge">मुख्य स्थान</span> रोहतास दुर्ग और काशी के निकट झोपड़ी</p>
-
-<h4>मुख्य घटनाएँ</h4>
-<ul>
-<li>ममता चूड़ामणि की विधवा पुत्री थी।</li>
-<li>चूड़ामणि स्वर्ण उपहार लेकर आए।</li>
-<li>ममता ने अनुचित स्वर्ण लेने से मना किया।</li>
-<li>शेरशाह ने छल से रोहतास दुर्ग पर अधिकार किया।</li>
-<li>ममता ने हुमायूँ को आश्रय दिया।</li>
-<li>अकबर ने हुमायूँ की स्मृति में अष्टकोण मंदिर बनवाया।</li>
-</ul>
-
-<h4>परीक्षा के लिए याद रखें</h4>
-<ul>
-<li>ममता – स्वाभिमान और त्याग का प्रतीक।</li>
-<li>चूड़ामणि – ममता के पिता।</li>
-<li>हुमायूँ – आश्रय लेने वाला यात्री।</li>
-<li>अकबर – स्मृति मंदिर बनवाने वाला।</li>
-<li>मुख्य संदेश – मानवता और अतिथि-धर्म।</li>
-</ul>
-`,
-
-pyq:`
-<h3>📜 परीक्षा अभ्यास प्रश्न (PYQ शैली)</h3>
-<p class="muted">ये परीक्षा के प्रचलित प्रश्न-प्रकार पर आधारित अभ्यास प्रश्न हैं, किसी विशेष वर्ष के शब्दशः प्रश्नपत्र होने का दावा नहीं है।</p>
-
-<div class="question"><b>1. ममता कहानी के रचनाकार का नाम लिखिए।</b><div class="answer">उत्तर: जयशंकर प्रसाद।</div></div>
-
-<div class="question"><b>2. ममता के पिता का नाम क्या था?</b><div class="answer">उत्तर: चूड़ामणि।</div></div>
-
-<div class="question"><b>3. चूड़ामणि किस दुर्ग के मंत्री थे?</b><div class="answer">उत्तर: रोहतास दुर्ग के।</div></div>
-
-<div class="question"><b>4. ममता ने स्वर्ण स्वीकार करने से क्यों मना किया?</b><div class="answer">उत्तर: क्योंकि वह उसे अनुचित रूप से प्राप्त धन मानती थी।</div></div>
-
-<div class="question"><b>5. ममता की झोपड़ी में किसने शरण ली?</b><div class="answer">उत्तर: हुमायूँ ने।</div></div>
-
-<div class="question"><b>6. हुमायूँ की स्मृति में मंदिर किसने बनवाया?</b><div class="answer">उत्तर: अकबर ने।</div></div>
-
-<div class="question"><b>7. ममता कहानी का केंद्रीय भाव लिखिए।</b><div class="answer">उत्तर: कहानी का केंद्रीय भाव मानवता, त्याग, स्वाभिमान और अतिथि-सत्कार है।</div></div>
-
-<div class="question"><b>8. ममता के चरित्र की दो विशेषताएँ लिखिए।</b><div class="answer">उत्तर: ममता स्वाभिमानी और दयालु थी।</div></div>
-
-<div class="question"><b>9. कहानी का शीर्षक किस प्रकार सार्थक है?</b><div class="answer">उत्तर: कहानी की सभी प्रमुख घटनाएँ ममता के चरित्र और उसके त्याग को उजागर करती हैं।</div></div>
-
-<div class="question"><b>10. कहानी से हमें क्या शिक्षा मिलती है?</b><div class="answer">उत्तर: हमें स्वाभिमान बनाए रखना चाहिए तथा जरूरतमंद व्यक्ति की सहायता मानवता के आधार पर करनी चाहिए।</div></div>
-`,
-
-mcq:[
- {q:"‘ममता’ कहानी के लेखक कौन हैं?",o:["प्रेमचंद","जयशंकर प्रसाद","महादेवी वर्मा","रामधारी सिंह दिनकर"],a:1,e:"ममता कहानी के रचनाकार जयशंकर प्रसाद हैं।"},
- {q:"ममता के पिता का नाम क्या था?",o:["चूड़ामणि","चंद्रगुप्त","अशोक","स्कंदगुप्त"],a:0,e:"चूड़ामणि रोहतास दुर्ग के मंत्री और ममता के पिता थे।"},
- {q:"ममता किस दुर्ग के मंत्री की पुत्री थी?",o:["चित्तौड़","आगरा","रोहतास","ग्वालियर"],a:2,e:"ममता रोहतास दुर्ग के मंत्री चूड़ामणि की पुत्री थी।"},
- {q:"ममता ने किस वस्तु को स्वीकार करने से मना किया?",o:["वस्त्र","स्वर्ण","भोजन","पुस्तक"],a:1,e:"ममता ने अनुचित रूप से प्राप्त स्वर्ण स्वीकार नहीं किया।"},
- {q:"रोहतास दुर्ग पर किसने अधिकार किया?",o:["अकबर","बाबर","शेरशाह सूरी","जहाँगीर"],a:2,e:"शेरशाह सूरी की सेना ने छल से दुर्ग पर अधिकार किया।"},
- {q:"ममता की झोपड़ी में किसने आश्रय लिया?",o:["अकबर","हुमायूँ","शेरशाह","चूड़ामणि"],a:1,e:"हुमायूँ ने पराजित होकर ममता की झोपड़ी में आश्रय लिया।"},
- {q:"ममता ने यात्री की सहायता किस भावना से की?",o:["लालच","डर","मानवता और अतिथि-धर्म","प्रसिद्धि"],a:2,e:"ममता ने अतिथि-धर्म और मानवता के कारण उसे आश्रय दिया।"},
- {q:"हुमायूँ की स्मृति में मंदिर किसने बनवाया?",o:["शेरशाह","बाबर","अकबर","जहाँगीर"],a:2,e:"अकबर ने अपने पिता हुमायूँ की स्मृति में मंदिर बनवाया।"},
- {q:"‘ममता’ किस विधा की रचना है?",o:["नाटक","ऐतिहासिक कहानी","उपन्यास","कविता"],a:1,e:"ममता एक ऐतिहासिक कहानी है।"},
- {q:"कहानी का मुख्य संदेश क्या है?",o:["धन ही सब कुछ है","सत्ता सबसे बड़ी है","मानवता और त्याग महत्वपूर्ण हैं","बदला लेना चाहिए"],a:2,e:"कहानी मानवता, स्वाभिमान, त्याग और अतिथि-सत्कार का संदेश देती है।"}
-]
-};
- 
-/* ================================
-   DYNAMIC STUDY MATERIAL
-================================ */
-
-let activeMaterial=mitrata;
-
-function tab(which,button){
- document.querySelectorAll(".tab").forEach(x=>
-  x.classList.remove("active")
- );
-
- if(button)button.classList.add("active");
-
- const content=document.getElementById("studyContent");
-
- const ready=(
-  classNo===10 &&
-  subjectNo===0 &&
-  groupName==="गद्य खण्ड" &&
-  (lessonName.startsWith("मित्रता") ||
-   lessonName.startsWith("ममता"))
- );
-
- if(!ready){
-  content.innerHTML=`
-   <h3>📘 ${which.toUpperCase()}</h3>
-   <div class="answer">इस पाठ की अध्ययन सामग्री अभी जोड़ी जानी बाकी है।</div>
-  `;
-  return;
- }
-
- activeMaterial=lessonName.startsWith("ममता")?mamta:mitrata;
-
- if(which==="mcq"){
-  showQuiz();
-  return;
- }
-
- content.innerHTML=activeMaterial[which]||
- "सामग्री उपलब्ध नहीं है।";
-}
-
-/* ================================
-   MCQ QUIZ SYSTEM
-================================ */
-
-let qIndex=0,score=0,locked=false;
-
-function showQuiz(){
- qIndex=0;
- score=0;
- locked=false;
- drawQuestion();
-}
-
-function drawQuestion(){
- const box=document.getElementById("studyContent");
- const questions=activeMaterial.mcq;
-
- if(qIndex>=questions.length){
-  box.innerHTML=`
-   <h3>🏆 Quiz Result</h3>
-   <h2>आपका स्कोर: ${score} / ${questions.length}</h2>
-   <p>${score>=8?"बहुत अच्छा! आपकी तैयारी अच्छी है।":
-   score>=5?"अच्छा प्रयास! फिर से अभ्यास करें।":
-   "Notes दोबारा पढ़ें और फिर प्रयास करें।"}</p>
-
-   <button onclick="showQuiz()">दोबारा Quiz दें</button>
-
-   <h3>उत्तर जाँच</h3>
-   ${questions.map((q,i)=>`
-    <div class="answer">
-     <b>${i+1}. ${q.q}</b><br>
-     सही उत्तर: ${q.o[q.a]}<br>
-     <small>${q.e}</small>
+  <!-- HEADER -->
+  <header id="mainHeader">
+    <div class="logo">
+      <h1>GSP LEARN</h1>
+      <p>UP Board Study Portal</p>
     </div>
-   `).join("")}
-  `;
-  return;
- }
 
- const q=questions[qIndex];
+    <nav>
+      <button onclick="showPage('homePage')">Home</button>
+      <button onclick="showPage('classPage')">Classes</button>
+      <button onclick="showPage('aboutPage')">About</button>
+    </nav>
+  </header>
 
- box.innerHTML=`
-  <h3>📝 MCQ Quiz</h3>
-  <p class="muted">प्रश्न ${qIndex+1}/${questions.length} • स्कोर ${score}</p>
-  <h3 style="color:white">${q.q}</h3>
+  <!-- MAIN WEBSITE CONTENT -->
+  <main>
 
-  <div id="options">
-   ${q.o.map((x,i)=>`
-    <button class="option" onclick="choose(${i})">
-     ${"ABCD"[i]}. ${x}
-    </button>
-   `).join("")}
-  </div>
+    <!-- HOME PAGE -->
+    <section id="homePage" class="page active">
+      <h2>Welcome to GSP LEARN</h2>
+      <p>UP Board Class 10 और Class 12 की पढ़ाई अब एक ही जगह।</p>
 
-  <div id="feedback"></div>
+      <div class="class-container">
+        <div class="class-card">
+          <h3>Class 10</h3>
+          <p>High School Study Material</p>
+          <button onclick="openClass(10)">Explore Class 10</button>
+        </div>
 
-  <button id="nextBtn" class="hidden" onclick="nextQ()">
-   अगला प्रश्न →
-  </button>
- `;
+        <div class="class-card">
+          <h3>Class 12</h3>
+          <p>Intermediate Study Material</p>
+          <button onclick="openClass(12)">Explore Class 12</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLASS SELECTION PAGE -->
+    <section id="classPage" class="page">
+      <h2>Select Your Class</h2>
+
+      <div class="class-container">
+        <button onclick="openClass(10)">Class 10</button>
+        <button onclick="openClass(12)">Class 12</button>
+      </div>
+    </section>
+
+    <!-- SUBJECTS PAGE -->
+    <section id="subjectsPage" class="page">
+      <button onclick="showPage('homePage')">← Home</button>
+      <h2 id="classHeading">Subjects</h2>
+
+      <div id="subjectsContainer">
+        <!-- Subjects will be added in later parts -->
+      </div>
+    </section>
+
+    <!-- CHAPTERS PAGE -->
+    <section id="chaptersPage" class="page">
+      <button onclick="goBackToSubjects()">← Back to Subjects</button>
+      <h2 id="subjectHeading">Chapters</h2>
+
+      <div id="chaptersContainer">
+        <!-- Chapters will be added in later parts -->
+      </div>
+    </section>
+
+    <!-- STUDY MATERIAL PAGE -->
+    <section id="studyPage" class="page">
+      <button onclick="goBackToChapters()">← Back to Chapters</button>
+      <h2 id="lessonHeading">Study Material</h2>
+
+      <div class="study-tabs">
+        <button onclick="tab('theory')">Theory</button>
+        <button onclick="tab('qa')">Question Answer</button>
+        <button onclick="tab('important')">Important Questions</button>
+        <button onclick="tab('notes')">Short Notes</button>
+        <button onclick="tab('pyq')">PYQ</button>
+        <button onclick="tab('mcq')">MCQ Quiz</button>
+      </div>
+
+      <div id="studyContent">
+        <!-- Study material will be added in later parts -->
+      </div>
+    </section>
+
+    <!-- ABOUT PAGE -->
+    <section id="aboutPage" class="page">
+      <h2>About GSP LEARN</h2>
+      <p>
+        GSP LEARN एक educational website है जहाँ UP Board
+        Class 10 और Class 12 के विद्यार्थियों के लिए
+        study material उपलब्ध कराया जाएगा।
+      </p>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer id="mainFooter">
+    <p>© 2026 GSP LEARN | All Rights Reserved</p>
+  </footer>
+
+  <!-- PART 3 ONWARDS: JAVASCRIPT इसी SCRIPT TAG में जोड़ा जाएगा -->
+  <script>
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-function choose(i){
- if(locked)return;
- locked=true;
-
- const q=activeMaterial.mcq[qIndex];
-
- document.querySelectorAll("#options button").forEach((b,j)=>{
-  b.disabled=true;
-  if(j===q.a)b.classList.add("correct");
-  else if(j===i)b.classList.add("wrong");
- });
-
- if(i===q.a)score++;
-
- document.getElementById("feedback").innerHTML=`
-  <div id="quizResult">
-   <b>${i===q.a?"✅ सही उत्तर!":"❌ गलत उत्तर"}</b>
-   <br>${q.e}
-  </div>
- `;
-
- document.getElementById("nextBtn").classList.remove("hidden");
+:root {
+  --bg: #071326;
+  --card: #10213a;
+  --card2: #142c49;
+  --border: #29415f;
+  --primary: #1687ff;
+  --cyan: #00d5ff;
+  --white: #f4f7ff;
+  --muted: #a9bad2;
+  --success: #12633e;
+  --danger: #8c2636;
 }
 
-function nextQ(){
- qIndex++;
- locked=false;
- drawQuestion();
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: Arial, "Noto Sans Devanagari", sans-serif;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* HEADER */
+
+#mainHeader {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(9, 24, 45, 0.96);
+  border-bottom: 1px solid var(--border);
+  padding: 15px 5%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  backdrop-filter: blur(12px);
+}
+
+.logo h1 {
+  font-size: 25px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.logo h1,
+.logo span {
+  color: var(--cyan);
+}
+
+.logo p {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* BUTTONS */
+
+button {
+  background: var(--primary);
+  color: white;
+  border: 0;
+  padding: 11px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  transition: 0.25s;
+  cursor: pointer;
+}
+
+button:hover {
+  background: var(--cyan);
+  color: #071326;
+  transform: translateY(-2px);
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+/* MAIN */
+
+main {
+  width: 100%;
+  max-width: 1100px;
+  margin: auto;
+  padding: 25px 16px 55px;
+}
+
+.page {
+  display: none;
+  animation: pageIn 0.35s ease;
+}
+
+.page.active {
+  display: block;
+}
+
+@keyframes pageIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
   }
- 
-/* =================================
-   NAVIGATION AND RENDERING
-================================= */
-let classNo=10,subjectNo=0,lessonName="",groupName="";
-const pages=["home","subjectsPage","lessonsPage","studyPage"];
-function page(id){pages.forEach(x=>document.getElementById(x).classList.add("hidden"));document.getElementById(id).classList.remove("hidden");window.scrollTo(0,0)}
-function home(){page("home")}
-function subjects(){page("subjectsPage")}
-function lessons(){page("lessonsPage")}
-
-function renderClasses(){
-  
- const names=[9,10,11,12];
-
- document.getElementById("classGrid").innerHTML=names.map(n=>`
-  <div class="card" onclick="openClass(${n})">
-   <div class="emoji">📘</div>
-   <h3>Class ${n}th</h3>
-   <p class="muted">UP Board • विषय देखें</p>
-  </div>
- `).join("");
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-function openClass(n){
- classNo=n;
- document.getElementById("classTitle").textContent="Class "+n+"th - UP Board";
+/* HOME HERO */
 
- const list=curriculum[n]||[];
- const msg=document.getElementById("classMessage");
- const grid=document.getElementById("subjectGrid");
-
- if(!list.length){
-  msg.innerHTML="इस कक्षा की विषय-सूची अभी जोड़ी नहीं गई है।";
-  grid.innerHTML="";
- }else{
-  msg.innerHTML="अपना विषय चुनें।";
-  grid.innerHTML=list.map((s,i)=>`
-   <div class="card" onclick="openSubject(${i})">
-    <div class="emoji">${s[1]}</div>
-    <h3>${s[0]}</h3>
-    <p class="muted">${s[2].reduce((a,g)=>a+g[1].length,0)} पाठ / अध्याय</p>
-   </div>
-  `).join("");
- }
- page("subjectsPage");
+#homePage {
+  text-align: center;
 }
 
-function openSubject(i){
- subjectNo=i;
- const subject=curriculum[classNo][i];
-
- document.getElementById("subjectTitle").textContent=subject[0];
- document.getElementById("search").value="";
-
- renderLessons();
- page("lessonsPage");
+#homePage > h2 {
+  font-size: 30px;
+  margin: 20px 0 10px;
+  color: var(--cyan);
 }
 
-function renderLessons(){
- const filter=document.getElementById("search").value.toLowerCase();
- let html="",n=0;
-
- curriculum[classNo][subjectNo][2].forEach(group=>{
-  const matching=group[1].filter(x=>x.toLowerCase().includes(filter));
-
-  if(!matching.length)return;
-
-  html+=`<div style="grid-column:1/-1"><h2>${group[0]}</h2></div>`;
-
-  matching.forEach(name=>{
-   n++;
-   html+=`
-    <div class="lesson" onclick="openLesson('${esc(group[0])}','${esc(name)}')">
-     <div class="num">${n}</div>
-     <div>
-      <b>${name}</b>
-      <p class="muted">अध्याय खोलें →</p>
-     </div>
-    </div>
-   `;
-  });
- });
-
- document.getElementById("lessonGrid").innerHTML=html||"कोई अध्याय नहीं मिला।";
+#homePage > p {
+  color: var(--muted);
+  margin-bottom: 25px;
 }
 
-function esc(s){
- return String(s)
- .replace(/&/g,"&amp;")
- .replace(/</g,"&lt;")
- .replace(/>/g,"&gt;")
- .replace(/"/g,"&quot;")
- .replace(/'/g,"&#39;");
+.hero {
+  padding: 35px 20px;
+  border-radius: 20px;
+  background: linear-gradient(130deg, #123b67, #101d35);
+  border: 1px solid #28618e;
+  margin-bottom: 25px;
 }
 
-function openLesson(g,n){
- groupName=g;
- lessonName=n;
+/* CLASS CARDS */
 
- document.getElementById("lessonTitle").textContent=n;
-
- document.getElementById("lessonInfo").textContent=
- "Class "+classNo+" • "+
- curriculum[classNo][subjectNo][0]+" • "+g;
-
- document.querySelectorAll(".tab").forEach((b,i)=>{
-  b.classList.toggle("active",i===0);
- });
-
- tab("theory",document.querySelector(".tab"));
- page("studyPage");
+.class-container {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 20px;
 }
 
-/* =========================
-   STUDY TABS
-========================= */
-
-function tab(which,button){
- document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
-
- if(button)button.classList.add("active");
-
- const content=document.getElementById("studyContent");
-
- const ready=(
-  classNo===10 &&
-  subjectNo===0 &&
-  groupName==="गद्य खण्ड" &&
-  lessonName.startsWith("मित्रता")
- );
-
- if(!ready){
-  const titles={
-   theory:"Theory",
-   qa:"प्रश्न-उत्तर",
-   important:"Important Questions",
-   mcq:"MCQ Quiz",
-   notes:"Short Notes",
-   pyq:"PYQ"
-  };
-
-  content.innerHTML=`
-   <h3>📘 ${titles[which]}</h3>
-   <p>यह अध्याय GSP LEARN की सूची में शामिल है।</p>
-   <div class="answer">
-    <b>अध्ययन सामग्री:</b>
-    इस अध्याय की प्रमाणित Theory, प्रश्न-उत्तर,
-    महत्वपूर्ण प्रश्न, MCQ, Short Notes और PYQ
-    अभी जोड़ने बाकी हैं।
-   </div>
-  `;
-  return;
- }
-
- if(which==="mcq"){
-  showQuiz();
-  return;
- }
-
- content.innerHTML=mitrata[which]||
- "<p>सामग्री उपलब्ध नहीं है।</p>";
+.class-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 17px;
+  padding: 24px 16px;
+  transition: 0.3s;
 }
 
-/* =========================
-   MCQ QUIZ SYSTEM
-========================= */
-
-let qIndex=0;
-let score=0;
-let locked=false;
-
-function showQuiz(){
- qIndex=0;
- score=0;
- locked=false;
- drawQuestion();
+.class-card:hover {
+  border-color: var(--cyan);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px #00d5ff18;
 }
 
-function drawQuestion(){
- const box=document.getElementById("studyContent");
-
- if(qIndex>=mitrata.mcq.length){
-  box.innerHTML=`
-   <h3>🏆 Quiz Result</h3>
-   <h2>आपका स्कोर: ${score} / ${mitrata.mcq.length}</h2>
-   <p>${score>=8?
-    "बहुत अच्छा! आपकी तैयारी अच्छी है।":
-    score>=5?
-    "अच्छा प्रयास! एक बार फिर अभ्यास करें।":
-    "अध्याय के Notes दोबारा पढ़ें और फिर प्रयास करें।"
-   }</p>
-
-   <button onclick="showQuiz()">दोबारा Quiz दें</button>
-
-   <h3 style="margin-top:22px">उत्तर जाँच</h3>
-
-   ${mitrata.mcq.map((q,i)=>`
-    <div class="answer">
-     <b>${i+1}. ${q.q}</b><br>
-     सही उत्तर: ${q.o[q.a]}<br>
-     <small>${q.e}</small>
-    </div>
-   `).join("")}
-  `;
-  return;
- }
-
- const q=mitrata.mcq[qIndex];
-
- box.innerHTML=`
-  <h3>📝 MCQ Quiz</h3>
-  <p class="muted">प्रश्न ${qIndex+1} / ${mitrata.mcq.length} • स्कोर ${score}</p>
-
-  <h3 style="color:white">${q.q}</h3>
-
-  <div id="options">
-   ${q.o.map((x,i)=>`
-    <button class="option" onclick="choose(${i})">
-     ${"ABCD"[i]}. ${x}
-    </button>
-   `).join("")}
-  </div>
-
-  <div id="feedback"></div>
-
-  <button id="nextBtn" class="hidden" onclick="nextQ()">
-   अगला प्रश्न →
-  </button>
- `;
+.class-card h3 {
+  font-size: 24px;
+  margin-bottom: 8px;
+  color: var(--cyan);
 }
 
-function choose(i){
- if(locked)return;
-
- locked=true;
-
- const q=mitrata.mcq[qIndex];
-
- document.querySelectorAll("#options button").forEach((b,j)=>{
-  b.disabled=true;
-
-  if(j===q.a)b.classList.add("correct");
-  else if(j===i)b.classList.add("wrong");
- });
-
- if(i===q.a)score++;
-
- document.getElementById("feedback").innerHTML=`
-  <div id="quizResult">
-   <b>${i===q.a?"✅ सही उत्तर!":"❌ गलत उत्तर"}</b>
-   <br>${q.e}
-  </div>
- `;
-
- document.getElementById("nextBtn").classList.remove("hidden");
+.class-card p {
+  color: var(--muted);
+  margin-bottom: 15px;
 }
 
-function nextQ(){
- qIndex++;
- locked=false;
- drawQuestion();
+/* SUBJECTS AND CHAPTERS */
+
+#subjectsContainer,
+#chaptersContainer {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 13px;
+  margin-top: 20px;
 }
 
-/* =========================
-   START WEBSITE
-========================= */
+.subject-card,
+.chapter-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  padding: 17px;
+  cursor: pointer;
+  transition: 0.25s;
+}
 
-renderClasses();
-page("home");
+.subject-card:hover,
+.chapter-card:hover {
+  border-color: var(--cyan);
+  background: var(--card2);
+}
 
-</script>
+#classHeading,
+#subjectHeading,
+#lessonHeading {
+  color: var(--cyan);
+  margin: 20px 0;
+}
+
+/* STUDY ROOM */
+
+#studyPage {
+  background: transparent;
+}
+
+.study-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 10px 0 17px;
+  scrollbar-width: thin;
+}
+
+.study-tabs button {
+  flex-shrink: 0;
+  background: #1a304d;
+  color: #d8e5f4;
+}
+
+.study-tabs button:hover,
+.study-tabs button.active {
+  background: var(--primary);
+  color: white;
+}
+
+#studyContent {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  line-height: 1.8;
+  min-height: 150px;
+}
+
+#studyContent h3 {
+  color: var(--cyan);
+  margin: 12px 0;
+}
+
+#studyContent h4 {
+  color: #e8f4ff;
+  margin: 16px 0 5px;
+}
+
+#studyContent p {
+  margin: 9px 0;
+}
+
+#studyContent ul {
+  padding-left: 22px;
+}
+
+/* ANSWERS */
+
+.answer {
+  background: #0b1b30;
+  border-left: 3px solid var(--primary);
+  padding: 13px;
+  margin: 10px 0;
+  border-radius: 8px;
+}
+
+.question {
+  padding: 13px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.badge {
+  display: inline-block;
+  background: #163e60;
+  color: #9ce7ff;
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 11px;
+  margin: 3px;
+}
+
+/* MCQ */
+
+.option {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: #1a304d;
+  margin: 8px 0;
+  font-weight: normal;
+}
+
+.option.correct {
+  background: var(--success);
+}
+
+.option.wrong {
+  background: var(--danger);
+}
+
+#quizResult {
+  margin-top: 15px;
+  padding: 15px;
+  background: #0b1b30;
+  border-radius: 10px;
+}
+
+/* FOOTER */
+
+#mainFooter {
+  text-align: center;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  padding: 25px 15px;
+  margin-top: 30px;
+}
+
+/* BACK BUTTON */
+
+.back {
+  background: #1b3453;
+  margin-bottom: 15px;
+}
+
+/* MOBILE RESPONSIVE */
+
+@media (max-width: 600px) {
+
+  #mainHeader {
+    padding: 12px 15px;
+  }
+
+  .logo h1 {
+    font-size: 21px;
+  }
+
+  nav {
+    width: 100%;
+  }
+
+  nav button {
+    flex: 1;
+    padding: 9px;
+  }
+
+  main {
+    padding: 18px 12px 40px;
+  }
+
+  .class-container {
+    grid-template-columns: 1fr;
+  }
+
+  #subjectsContainer,
+  #chaptersContainer {
+    grid-template-columns: 1fr;
+  }
+
+  #homePage > h2 {
+    font-size: 25px;
+  }
+
+  #studyContent {
+    padding: 14px;
+  }
+  }
+   
+  </script>
+
 </body>
 </html>
